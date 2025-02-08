@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador LLF</title>
+    <link rel="icon" href="https://cdn.discordapp.com/attachments/650707670130753537/1337400551696236584/Logo_LLF.png?ex=67a74ed3&is=67a5fd53&hm=00daf4545d6cddbfe800c2772c9d5e79242566f9ce2e4e289b3a91b08ab709ee&" type="image/x-icon">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #8916c6;
+        }
+        .marcador {
+            display: flex;
+            grid-template-columns: auto 1fr 1fr;
+            justify-content: center;
+            align-items: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            margin: 50px auto 0;
+            width: 700px;
+            gap: 10px;
+            border: 2px solid #000; /* Borde inicial */
+            color: #000; /* Color de texto inicial */
+        }
+        .equipo {
+            font-size: 24px;
+            margin: 5px;
+            text-align: center;
+        }
+        .puntaje-container {
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 5px;
+        }
+        .puntaje {
+            font-size: 48px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        .temporizador-container {
+            display: flex;
+            align-items: center;
+            grid-column: span 3;
+            justify-self: start;
+            margin: 0px 0;
+            gap: 10px;
+        }
+        .temporizador {
+            font-size: 32px;
+        }
+        .temporizador-extra {
+            font-size: 24px;
+            margin: 10px 0;
+            grid-column: span 3;
+            justify-self: start;
+            display: none; /* Ocultar por defecto */
+        }
+        .botones {
+            display: flex;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .control-temporizador {
+            margin-top: 20px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+        }
+        button:active {
+            background-color: #218838;
+        }
+        .equipo-img {
+            height: 32px;
+            margin-right: 10px;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .input-container input {
+            margin: 5px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="marcador" id="marcador">
+        <div class="temporizador-container">
+            <img src="https://cdn.discordapp.com/attachments/650707670130753537/1337400551696236584/Logo_LLF.png?ex=67a74ed3&is=67a5fd53&hm=00daf4545d6cddbfe800c2772c9d5e79242566f9ce2e4e289b3a91b08ab709ee&" alt="Imagen" style="margin-left: 5px; height: 32px;" id="imgTemporizador">
+            <div class="parte" id="parte">1ª Parte</div>
+            <div class="temporizador" id="temporizador">15:00</div>
+            <div class="temporizador-extra" id="temporizador-extra">+0</div>
+        </div>
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/96/Córdoba_CF_logo.svg/1200px-Córdoba_CF_logo.svg.png" alt="Equipo A" class="equipo-img" id="imgEquipo1">
+        <div class="equipo" id="equipo1">Cordoba CF</div>
+        <div class="puntaje-container">
+            <div class="puntaje" id="puntaje1">0</div>
+        </div>
+        <div class="puntaje-container">
+            <div class="puntaje" id="puntaje2">0</div>
+        </div>
+        <div class="equipo" id="equipo2">Palermo FC</div>
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Palermo_Calcio_logo_%282019%29.svg/1200px-Palermo_Calcio_logo_%282019%29.svg.png" alt="Equipo B" class="equipo-img" id="imgEquipo2">
+
+    </div>
+    
+    <div class="control-temporizador">
+        <h2>Puntos y tiempo</h2>
+        <button onclick="sumarPunto('puntaje1')">+1</button>
+        <button onclick="restarPunto('puntaje1')">-1</button>
+        <button onclick="iniciarTemporizador()">Iniciar</button>
+        <button onclick="detenerTemporizador()">Detener</button>
+        <button onclick="reiniciarTemporizador()">Reiniciar</button>
+        <button onclick="sumarPunto('puntaje2')">+1</button>
+        <button onclick="restarPunto('puntaje2')">-1</button>
+        <button onclick="cambiarParte('1ª Parte')">1ª Parte</button>
+        <button onclick="cambiarParte('2ª Parte')">2ª Parte</button>
+        <br>
+        <h2>Tiempo añadido</h2>
+        <button onclick="anadirTiempo(1)">+1</button>
+        <button onclick="anadirTiempo(2)">+2</button>
+        <button onclick="anadirTiempo(3)">+3</button>
+        <button onclick="anadirTiempo(4)">+4</button>
+        <button onclick="anadirTiempo(5)">+5</button>
+    </div>
+
+    <div class="input-container"></div>
+        <h2>Nombres y escudos</h2>
+        <input type="text" id="inputEquipo1" placeholder="Nombre del Equipo 1">
+        <button onclick="cambiarNombre('equipo1', 'inputEquipo1')">Cambiar Nombre</button>
+        <input type="text" id="inputEquipo2" placeholder="Nombre del Equipo 2">
+        <button onclick="cambiarNombre('equipo2', 'inputEquipo2')">Cambiar Nombre</button>
+        <br>
+        <input type="text" id="inputImgEquipo1" placeholder="URL Imagen Equipo 1">
+        <button onclick="cambiarImagen('imgEquipo1', 'inputImgEquipo1')">Cambiar Imagen</button>
+        <input type="text" id="inputImgEquipo2" placeholder="URL Imagen Equipo 2">
+        <button onclick="cambiarImagen('imgEquipo2', 'inputImgEquipo2')">Cambiar Imagen</button>
+        <br>
+        <input type="text" id="inputImgTemporizador" placeholder="URL Imagen Competición">
+        <button onclick="cambiarImagen('imgTemporizador', 'inputImgTemporizador')">Cambiar Imagen</button>
+        <br>
+        <h2>Colores</h2>
+        <input type="color" id="colorFondo" value="#ffffff">
+        <button onclick="cambiarColorFondo()">Cambiar Color de Fondo</button>
+        <input type="color" id="colorTexto" value="#000000">
+        <button onclick="cambiarColorTexto()">Cambiar Color de Texto</button>
+        <input type="color" id="colorBorde" value="#000000">
+        <button onclick="cambiarColorBorde()">Cambiar Color de Borde</button>
+    </div>
+
+    <script>
+        let intervalo;
+        let tiempoRestante = 900;
+        let tiempoExtra = 0;
+        
+        function actualizarTemporizador() {
+            let minutos = Math.floor(tiempoRestante / 60);
+            let segundos = tiempoRestante % 60;
+            segundos = segundos < 10 ? "0" + segundos : segundos;
+            document.getElementById("temporizador").textContent = minutos + ":" + segundos;
+        }
+
+        function actualizarTemporizadorExtra() {
+            document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+        }
+        
+        function iniciarTemporizador() {
+            if (intervalo) clearInterval(intervalo);
+            intervalo = setInterval(function () {
+                if (tiempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    document.getElementById("temporizador").textContent = "Tiempo terminado";
+                } else {
+                    tiempoRestante--;
+                    actualizarTemporizador();
+                }
+            }, 1000);
+        }
+        
+        function detenerTemporizador() {
+            clearInterval(intervalo);
+        }
+        
+        function reiniciarTemporizador() {
+            detenerTemporizador();
+            tiempoRestante = 900;
+            tiempoExtra = 0;
+            actualizarTemporizador();
+            actualizarTemporizadorExtra();
+            document.getElementById("temporizador-extra").style.display = "none"; // Ocultar al reiniciar
+        }
+
+        function sumarPunto(id) {
+            let puntaje = document.getElementById(id);
+            puntaje.textContent = parseInt(puntaje.textContent) + 1;
+        }
+
+        function restarPunto(id) {
+            let puntaje = document.getElementById(id);
+            let valor = parseInt(puntaje.textContent);
+            if (valor > 0) {
+                puntaje.textContent = valor - 1;
+            }
+        }
+
+        function anadirTiempo(minutos) {
+            tiempoExtra += minutos;
+            tiempoRestante += minutos * 60;
+            actualizarTemporizador();
+            actualizarTemporizadorExtra();
+            document.getElementById("temporizador-extra").style.display = "block"; // Mostrar cuando se añade tiempo
+        }
+
+        function cambiarNombre(equipoId, inputId) {
+            let nuevoNombre = document.getElementById(inputId).value;
+            if (nuevoNombre) {
+                document.getElementById(equipoId).textContent = nuevoNombre;
+                document.getElementById(inputId).value = ""; // Vaciar el input
+            }
+        }
+
+        function cambiarImagen(imgId, inputId) {
+            let nuevaImagen = document.getElementById(inputId).value;
+            if (nuevaImagen) {
+                document.getElementById(imgId).src = nuevaImagen;
+                document.getElementById(inputId).value = ""; // Vaciar el input
+            }
+        }
+
+        function cambiarColorFondo() {
+            let color = document.getElementById("colorFondo").value;
+            document.getElementById("marcador").style.backgroundColor = color;
+        }
+
+        function cambiarColorTexto() {
+            let color = document.getElementById("colorTexto").value;
+            document.getElementById("marcador").style.color = color;
+        }
+
+        function cambiarColorBorde() {
+            let color = document.getElementById("colorBorde").value;
+            document.getElementById("marcador").style.borderColor = color;
+        }
+
+        function cambiarParte(parte) {
+            document.getElementById("parte").textContent = parte;
+        }
+        
+        actualizarTemporizador();
+        actualizarTemporizadorExtra();
+    </script>
+</body>
+</html>
