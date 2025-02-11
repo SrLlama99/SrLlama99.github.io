@@ -26,6 +26,11 @@
             border: 2px solid #ffffff; /* Borde inicial */
             color: #ffffff; /* Color de texto inicial */
         }
+        .parte {
+            font-size: 24px;
+            margin: 5px;
+            text-align: center;
+        }
         .equipo {
             font-size: 24px;
             margin: 5px;
@@ -105,7 +110,7 @@
     <div class="marcador" id="marcador">
         <div class="temporizador-container">
             <img src="https://cdn.discordapp.com/attachments/1244679946920787979/1338931501915570310/copa-del-rey-spain-logo-with-name-white-symbol-abstract-design-illustration-with-black-background-free-vector.jpg?ex=67ace0a2&is=67ab8f22&hm=8f86825cd75aefeca18332774e26cbbb5b7981d039fd8bcd9cd676edbbbc559e&" alt="Imagen" style="margin-left: 5px; height: 45px;" id="imgTemporizador">
-            <div class="parte" id="parte">1ª Parte</div>
+            <div class="parte" id="parte">1ª</div>
             <div class="temporizador" id="temporizador">15:00</div>
             <div class="temporizador-extra" id="temporizador-extra">+0</div>
         </div>
@@ -131,8 +136,8 @@
         <button onclick="reiniciarTemporizador()">Reiniciar</button>
         <button onclick="sumarPunto('puntaje2')">+1</button>
         <button onclick="restarPunto('puntaje2')">-1</button>
-        <button onclick="cambiarParte('1ª Parte')">1ª Parte</button>
-        <button onclick="cambiarParte('2ª Parte')">2ª Parte</button>
+        <button onclick="cambiarParte('1ª')">1ª Parte</button>
+        <button onclick="cambiarParte('2ª')">2ª Parte</button>
         <br>
         <h2>Tiempo añadido</h2>
         <button onclick="anadirTiempo(1)">+1</button>
