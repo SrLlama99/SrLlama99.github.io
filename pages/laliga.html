@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador LLF</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+    <style>
+
+        body {
+            font-family: 'Anton',Arial, sans-serif;
+            text-align: center;
+            background-color: #8916c6;
+        }
+
+        /* === MARCADOR CON IMAGEN DE FONDO === */
+        .marcador {
+            position: relative;
+            width: 500px;
+            height: 250px;
+            margin: 50px auto;
+            background-image: url("/marcadores/laliga.png");
+            background-size: 155%;
+            background-position: -170px;
+            display: grid;
+            grid-template-columns: 1fr 0.5fr 0.5fr;
+            grid-template-rows: 1fr 1fr;
+            overflow: hidden;
+        }
+
+        /* === ESCUDOS EN FRANJA NEGRA (VERTICAL) === */
+        .equipo-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: auto;
+            display: block;
+        }
+
+        #imgEquipo1 {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        #imgEquipo2 {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        /* === RESULTADOS EN LOS CUADRADOS BLANCOS === */
+        .puntaje {
+            font-size: 64px;
+            font-weight: bold;
+            color: black;
+            text-align: center;
+            line-height: 120px;
+        }
+
+        #puntaje1 {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        #puntaje2 {
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        /* === TIEMPO Y PARTE EN EL RECTÁNGULO BLANCO === */
+        .tiempo-container {
+            position: absolute;
+            top: 140px;
+            right: 265px;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 50px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .temporizador {
+            font-size: 50px;
+            font-weight: bold;
+        }
+
+        .temporizador-extra {
+            font-size: 30px;
+            grid-column: span 3;
+            justify-self: start;
+            display: none;
+            /* Ocultar por defecto */
+        }
+
+        /* === CONTROLES === */
+        .control-temporizador {
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+        }
+
+        button:active {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="marcador" id="marcador">
+        <!-- Escudo equipo 1 -->
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/96/Córdoba_CF_logo.svg/1200px-Córdoba_CF_logo.svg.png"
+            alt="Equipo 1" id="imgEquipo1" class="equipo-img">
+
+        <!-- Escudo equipo 2 -->
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Palermo_Calcio_logo_%282019%29.svg/1200px-Palermo_Calcio_logo_%282019%29.svg.png"
+            alt="Equipo 2" id="imgEquipo2" class="equipo-img">
+
+        <!-- Puntuaciones -->
+        <div id="puntaje1" class="puntaje">0</div>
+        <div id="puntaje2" class="puntaje">0</div>
+
+        <!-- Tiempo -->
+        <div class="tiempo-container">
+            <div class="temporizador-extra" id="temporizador-extra">+0</div>
+            <div class="temporizador" id="temporizador"> 15:00</div>
+        </div>
+    </div>
+
+    <div class="control-temporizador">
+        <h2>Puntos y tiempo</h2>
+        <button onclick="sumarPunto('puntaje1')">+1</button>
+        <button onclick="restarPunto('puntaje1')">-1</button>
+        <button onclick="iniciarTemporizador()">Iniciar</button>
+        <button onclick="detenerTemporizador()">Detener</button>
+        <button onclick="reiniciarTemporizador()">Reiniciar</button>
+        <button onclick="sumarPunto('puntaje2')">+1</button>
+        <button onclick="restarPunto('puntaje2')">-1</button>
+        <button onclick="cambiarParte('1ª')">1ª Parte</button>
+        <button onclick="cambiarParte('2ª')">2ª Parte</button>
+        <br>
+        <h2>Tiempo añadido</h2>
+        <button onclick="anadirTiempo(1)">+1</button>
+        <button onclick="anadirTiempo(2)">+2</button>
+        <button onclick="anadirTiempo(3)">+3</button>
+        <button onclick="anadirTiempo(4)">+4</button>
+        <button onclick="anadirTiempo(5)">+5</button>
+    </div>
+
+    <div class="input-container"></div>
+    <h2>Escudos</h2>
+    <input type="text" id="inputImgEquipo1" placeholder="URL Imagen Equipo 1">
+    <button onclick="cambiarImagen('imgEquipo1', 'inputImgEquipo1')">Cambiar Imagen</button>
+    <input type="text" id="inputImgEquipo2" placeholder="URL Imagen Equipo 2">
+    <button onclick="cambiarImagen('imgEquipo2', 'inputImgEquipo2')">Cambiar Imagen</button>
+    <br>
+    <br>
+    </div>
+
+    <script>
+        let intervalo;
+        let tiempoRestante = 900;
+        let tiempoExtra = 0;
+
+        function actualizarTemporizador() {
+            let minutos = Math.floor(tiempoRestante / 60);
+            let segundos = tiempoRestante % 60;
+            segundos = segundos < 10 ? "0" + segundos : segundos;
+            document.getElementById("temporizador").textContent = minutos + ":" + segundos;
+        }
+
+        function actualizarTemporizadorExtra() {
+            document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+        }
+
+        function iniciarTemporizador() {
+            if (intervalo) clearInterval(intervalo);
+            intervalo = setInterval(function () {
+                if (tiempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    document.getElementById("temporizador").textContent = "Tiempo terminado";
+                } else {
+                    tiempoRestante--;
+                    actualizarTemporizador();
+                }
+            }, 1000);
+        }
+
+        function detenerTemporizador() {
+            clearInterval(intervalo);
+        }
+
+        function reiniciarTemporizador() {
+            detenerTemporizador();
+            tiempoRestante = 900;
+            tiempoExtra = 0;
+            actualizarTemporizador();
+            actualizarTemporizadorExtra();
+            document.getElementById("temporizador-extra").style.display = "none"; // Ocultar al reiniciar
+            document.querySelector(".tiempo-container").style.top = "140px";
+        }
+
+        function sumarPunto(id) {
+            let puntaje = document.getElementById(id);
+            puntaje.textContent = parseInt(puntaje.textContent) + 1;
+        }
+
+        function restarPunto(id) {
+            let puntaje = document.getElementById(id);
+            let valor = parseInt(puntaje.textContent);
+            if (valor > 0) {
+                puntaje.textContent = valor - 1;
+            }
+        }
+
+        function anadirTiempo(minutos) {
+            tiempoExtra += minutos;
+            tiempoRestante += minutos * 60;
+            actualizarTemporizador();
+            actualizarTemporizadorExtra();
+            document.getElementById("temporizador-extra").style.display = "block"; // Mostrar cuando se añade tiempo
+            document.querySelector(".tiempo-container").style.top = "120px";
+        }
+
+        function cambiarNombre(equipoId, inputId) {
+            let nuevoNombre = document.getElementById(inputId).value;
+            if (nuevoNombre) {
+                document.getElementById(equipoId).textContent = nuevoNombre;
+                document.getElementById(inputId).value = ""; // Vaciar el input
+            }
+        }
+
+        function cambiarImagen(imgId, inputId) {
+            let nuevaImagen = document.getElementById(inputId).value;
+            if (nuevaImagen) {
+                document.getElementById(imgId).src = nuevaImagen;
+                document.getElementById(inputId).value = ""; // Vaciar el input
+            }
+        }
+
+        function cambiarColorFondo() {
+            let color = document.getElementById("colorFondo").value;
+            document.getElementById("marcador").style.backgroundColor = color;
+        }
+
+        function cambiarColorTexto() {
+            let color = document.getElementById("colorTexto").value;
+            document.getElementById("marcador").style.color = color;
+        }
+
+        function cambiarColorBorde() {
+            let color = document.getElementById("colorBorde").value;
+            document.getElementById("marcador").style.borderColor = color;
+        }
+
+        function cambiarParte(parte) {
+            document.getElementById("parte").textContent = parte;
+        }
+
+        actualizarTemporizador();
+        actualizarTemporizadorExtra();
+    </script>
+</body>
+
+</html>

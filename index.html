@@ -1,276 +1,187 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador LLF</title>
-    <link rel="icon" href="https://cdn.discordapp.com/attachments/650707670130753537/1337400551696236584/Logo_LLF.png?ex=67a74ed3&is=67a5fd53&hm=00daf4545d6cddbfe800c2772c9d5e79242566f9ce2e4e289b3a91b08ab709ee&" type="image/x-icon">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #8916c6;
-        }
-        .marcador {
-            display: flex;
-            grid-template-columns: auto 1fr 1fr;
-            justify-content: center;
-            align-items: center;
-            background: rgb(0, 0, 0);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin: 50px auto 0;
-            width: 1000px;
-            gap: 20px;
-            border: 2px solid #ffffff; /* Borde inicial */
-            color: #ffffff; /* Color de texto inicial */
-        }
-        .parte {
-            font-size: 24px;
-            margin: 5px;
-            text-align: center;
-        }
-        .equipo {
-            font-size: 24px;
-            margin: 5px;
-            text-align: center;
-        }
-        .puntaje-container {
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 5px;
-        }
-        .puntaje {
-            font-size: 48px;
-            font-weight: bold;
-            margin-left: 5px;
-        }
-        .temporizador-container {
-            display: flex;
-            align-items: center;
-            grid-column: span 3;
-            justify-self: start;
-            margin: 0px 0;
-            gap: 10px;
-        }
-        .temporizador {
-            font-size: 32px;
-        }
-        .temporizador-extra {
-            font-size: 24px;
-            margin: 10px 0;
-            grid-column: span 3;
-            justify-self: start;
-            display: none; /* Ocultar por defecto */
-        }
-        .botones {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-        }
-        .control-temporizador {
-            margin-top: 20px;
-        }
-        button {
-            margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-        }
-        button:active {
-            background-color: #218838;
-        }
-        .equipo-img {
-            height: 32px;
-            margin-right: 10px;
-        }
-        .input-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .input-container input {
-            margin: 5px;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Página de Inicio - Proyecto</title>
+  <style>
+    :root{
+      --bg:#0f1724; /* fondo oscuro */
+      --card:#0b1220;
+      --accent:#ff6b6b;
+      --accent-2:#7c5cff;
+      --text:#e6eef8;
+      --muted:#9fb0c8;
+      --glass: rgba(255,255,255,0.03);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,var(--bg), #071025 120%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+
+    .container{
+      width:100%;
+      max-width:1100px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+      border-radius:14px;
+      padding:28px;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
+      border:1px solid rgba(255,255,255,0.03);
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:22px;
+    }
+
+    .logo{
+      display:flex;align-items:center;gap:12px
+    }
+    .logo .mark{
+      width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:18px;box-shadow:0 6px 18px rgba(124,92,255,0.16);
+    }
+    h1{margin:0;font-size:20px}
+    p.lead{margin:0;color:var(--muted);font-size:13px}
+
+    .grid{
+      display:grid;
+      gap:16px;
+      grid-template-columns:repeat(4,1fr);
+    }
+
+    /* botón estilo tarjeta */
+    .btn-card{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:18px 12px;
+      border-radius:12px;
+      text-decoration:none;
+      color:var(--text);
+      background:linear-gradient(180deg, rgba(255,255,255,0.012), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 6px 18px rgba(2,6,23,0.45);
+      transition: transform .18s cubic-bezier(.2,.9,.3,1), box-shadow .18s, border-color .18s;
+      font-weight:600;
+      font-size:15px;
+    }
+    .btn-card:active{transform:translateY(1px)}
+    .btn-card:hover{
+      transform:translateY(-6px) scale(1.01);
+      border-color: rgba(124,92,255,0.45);
+      box-shadow: 0 12px 28px rgba(124,92,255,0.08);
+    }
+
+    .btn-card .label{display:block}
+    .btn-card .desc{display:block;font-size:12px;color:var(--muted);font-weight:500;margin-top:6px}
+
+    /* variantes de color */
+    .accent{background:linear-gradient(180deg, rgba(255,107,107,0.06), rgba(255,107,107,0.03));border-left:4px solid var(--accent)}
+    .accent-2{background:linear-gradient(180deg, rgba(124,92,255,0.06), rgba(124,92,255,0.03));border-left:4px solid var(--accent-2)}
+
+    /* responsive */
+    @media (max-width:1000px){
+      .grid{grid-template-columns:repeat(3,1fr)}
+    }
+    @media (max-width:720px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+      .logo .mark{width:48px;height:48px}
+    }
+    @media (max-width:420px){
+      .grid{grid-template-columns:repeat(1,1fr)}
+      .container{padding:18px}
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+  </style>
 </head>
 <body>
-    <div class="marcador" id="marcador">
-        <div class="temporizador-container">
-            <img src="https://cdn.discordapp.com/attachments/1244679946920787979/1338931501915570310/copa-del-rey-spain-logo-with-name-white-symbol-abstract-design-illustration-with-black-background-free-vector.jpg?ex=67ace0a2&is=67ab8f22&hm=8f86825cd75aefeca18332774e26cbbb5b7981d039fd8bcd9cd676edbbbc559e&" alt="Imagen" style="margin-left: 5px; height: 45px;" id="imgTemporizador">
-            <div class="parte" id="parte">1ª</div>
-            <div class="temporizador" id="temporizador">15:00</div>
-            <div class="temporizador-extra" id="temporizador-extra">+0</div>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <div class="mark">LLF</div>
+        <div>
+          <h1>Marcadores LLF</h1>
+          <p class="lead">Selecciona una sección para ir al marcador de esa competición.</p>
         </div>
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/96/Córdoba_CF_logo.svg/1200px-Córdoba_CF_logo.svg.png" alt="Equipo A" class="equipo-img" id="imgEquipo1">
-        <div class="equipo" id="equipo1">Cordoba CF</div>
-        <div class="puntaje-container">
-            <div class="puntaje" id="puntaje1">0</div>
-        </div>
-        <div class="puntaje-container">
-            <div class="puntaje" id="puntaje2">0</div>
-        </div>
-        <div class="equipo" id="equipo2">Palermo FC</div>
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/d/df/Palermo_Calcio_logo_%282019%29.svg/1200px-Palermo_Calcio_logo_%282019%29.svg.png" alt="Equipo B" class="equipo-img" id="imgEquipo2">
+      </div>
+      <div style="text-align:right;color:var(--muted);font-size:13px">Marcadores • Menú principal</div>
+    </header>
 
-    </div>
-    
-    <div class="control-temporizador">
-        <h2>Puntos y tiempo</h2>
-        <button onclick="sumarPunto('puntaje1')">+1</button>
-        <button onclick="restarPunto('puntaje1')">-1</button>
-        <button onclick="iniciarTemporizador()">Iniciar</button>
-        <button onclick="detenerTemporizador()">Detener</button>
-        <button onclick="reiniciarTemporizador()">Reiniciar</button>
-        <button onclick="sumarPunto('puntaje2')">+1</button>
-        <button onclick="restarPunto('puntaje2')">-1</button>
-        <button onclick="cambiarParte('1ª')">1ª Parte</button>
-        <button onclick="cambiarParte('2ª')">2ª Parte</button>
-        <br>
-        <h2>Tiempo añadido</h2>
-        <button onclick="anadirTiempo(1)">+1</button>
-        <button onclick="anadirTiempo(2)">+2</button>
-        <button onclick="anadirTiempo(3)">+3</button>
-        <button onclick="anadirTiempo(4)">+4</button>
-        <button onclick="anadirTiempo(5)">+5</button>
-    </div>
+    <main>
+      <nav class="grid" aria-label="Menú principal">
+        <a class="btn-card accent" href="/pages/laliga.html">
+          <div>
+            <span class="label">LaLiga</span>
+            <span class="desc">Marcador LaLiga</span>
+          </div>
+        </a>
 
-    <div class="input-container"></div>
-        <h2>Nombres y escudos</h2>
-        <input type="text" id="inputEquipo1" placeholder="Nombre del Equipo 1">
-        <button onclick="cambiarNombre('equipo1', 'inputEquipo1')">Cambiar Nombre</button>
-        <input type="text" id="inputEquipo2" placeholder="Nombre del Equipo 2">
-        <button onclick="cambiarNombre('equipo2', 'inputEquipo2')">Cambiar Nombre</button>
-        <br>
-        <input type="text" id="inputImgEquipo1" placeholder="URL Imagen Equipo 1">
-        <button onclick="cambiarImagen('imgEquipo1', 'inputImgEquipo1')">Cambiar Imagen</button>
-        <input type="text" id="inputImgEquipo2" placeholder="URL Imagen Equipo 2">
-        <button onclick="cambiarImagen('imgEquipo2', 'inputImgEquipo2')">Cambiar Imagen</button>
-        <br>
-        <input type="text" id="inputImgTemporizador" placeholder="URL Imagen Competición">
-        <button onclick="cambiarImagen('imgTemporizador', 'inputImgTemporizador')">Cambiar Imagen</button>
-        <br>
-        <h2>Colores</h2>
-        <input type="color" id="colorFondo" value="#ffffff">
-        <button onclick="cambiarColorFondo()">Cambiar Color de Fondo</button>
-        <input type="color" id="colorTexto" value="#000000">
-        <button onclick="cambiarColorTexto()">Cambiar Color de Texto</button>
-        <input type="color" id="colorBorde" value="#000000">
-        <button onclick="cambiarColorBorde()">Cambiar Color de Borde</button>
-    </div>
+        <a class="btn-card accent-2" href="pagina2.html">
+          <div>
+            <span class="label">Premier League</span>
+            <span class="desc">Marcador Premier</span>
+          </div>
+        </a>
 
-    <script>
-        let intervalo;
-        let tiempoRestante = 900;
-        let tiempoExtra = 0;
-        
-        function actualizarTemporizador() {
-            let minutos = Math.floor(tiempoRestante / 60);
-            let segundos = tiempoRestante % 60;
-            segundos = segundos < 10 ? "0" + segundos : segundos;
-            document.getElementById("temporizador").textContent = minutos + ":" + segundos;
-        }
+        <a class="btn-card" href="pagina3.html">
+          <div>
+            <span class="label">Serie A</span>
+            <span class="desc">Marcador Serie A</span>
+          </div>
+        </a>
 
-        function actualizarTemporizadorExtra() {
-            document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
-        }
-        
-        function iniciarTemporizador() {
-            if (intervalo) clearInterval(intervalo);
-            intervalo = setInterval(function () {
-                if (tiempoRestante <= 0) {
-                    clearInterval(intervalo);
-                    document.getElementById("temporizador").textContent = "Tiempo terminado";
-                } else {
-                    tiempoRestante--;
-                    actualizarTemporizador();
-                }
-            }, 1000);
-        }
-        
-        function detenerTemporizador() {
-            clearInterval(intervalo);
-        }
-        
-        function reiniciarTemporizador() {
-            detenerTemporizador();
-            tiempoRestante = 900;
-            tiempoExtra = 0;
-            actualizarTemporizador();
-            actualizarTemporizadorExtra();
-            document.getElementById("temporizador-extra").style.display = "none"; // Ocultar al reiniciar
-        }
+        <a class="btn-card" href="pagina4.html">
+          <div>
+            <span class="label">Champions League</span>
+            <span class="desc">Marcador UCL</span>
+          </div>
+        </a>
 
-        function sumarPunto(id) {
-            let puntaje = document.getElementById(id);
-            puntaje.textContent = parseInt(puntaje.textContent) + 1;
-        }
+        <a class="btn-card accent" href="pagina5.html">
+          <div>
+            <span class="label">Copa del Rey</span>
+            <span class="desc">Marcador Copa</span>
+          </div>
+        </a>
 
-        function restarPunto(id) {
-            let puntaje = document.getElementById(id);
-            let valor = parseInt(puntaje.textContent);
-            if (valor > 0) {
-                puntaje.textContent = valor - 1;
-            }
-        }
+        <a class="btn-card accent-2" href="pagina6.html">
+          <div>
+            <span class="label">FA Cup</span>
+            <span class="desc">Marcador FA Cup</span>
+          </div>
+        </a>
 
-        function anadirTiempo(minutos) {
-            tiempoExtra += minutos;
-            tiempoRestante += minutos * 60;
-            actualizarTemporizador();
-            actualizarTemporizadorExtra();
-            document.getElementById("temporizador-extra").style.display = "block"; // Mostrar cuando se añade tiempo
-        }
+        <a class="btn-card" href="pagina7.html">
+          <div>
+            <span class="label">Coppa Italia</span>
+            <span class="desc">Marcador Coppa</span>
+          </div>
+        </a>
 
-        function cambiarNombre(equipoId, inputId) {
-            let nuevoNombre = document.getElementById(inputId).value;
-            if (nuevoNombre) {
-                document.getElementById(equipoId).textContent = nuevoNombre;
-                document.getElementById(inputId).value = ""; // Vaciar el input
-            }
-        }
-
-        function cambiarImagen(imgId, inputId) {
-            let nuevaImagen = document.getElementById(inputId).value;
-            if (nuevaImagen) {
-                document.getElementById(imgId).src = nuevaImagen;
-                document.getElementById(inputId).value = ""; // Vaciar el input
-            }
-        }
-
-        function cambiarColorFondo() {
-            let color = document.getElementById("colorFondo").value;
-            document.getElementById("marcador").style.backgroundColor = color;
-        }
-
-        function cambiarColorTexto() {
-            let color = document.getElementById("colorTexto").value;
-            document.getElementById("marcador").style.color = color;
-        }
-
-        function cambiarColorBorde() {
-            let color = document.getElementById("colorBorde").value;
-            document.getElementById("marcador").style.borderColor = color;
-        }
-
-        function cambiarParte(parte) {
-            document.getElementById("parte").textContent = parte;
-        }
-        
-        actualizarTemporizador();
-        actualizarTemporizadorExtra();
-    </script>
+        <a class="btn-card" href="pagina8.html">
+          <div>
+            <span class="label">Europa League</span>
+            <span class="desc">Marcador UEL</span>
+          </div>
+        </a>
+      </nav>
+    </main>
+  </div>
 </body>
 </html>
