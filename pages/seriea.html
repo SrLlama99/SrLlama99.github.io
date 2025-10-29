@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador LLF</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arimo', Arial, sans-serif;
+            background-color: green;
+            text-align: center;
+        }
+
+        .marcador {
+            position: relative;
+            width: 700px;
+            height: 350px;
+            margin: 40px auto;
+            background-image: url("/marcadores/seriea.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        /* Abreviaturas */
+        .equipo-abv {
+            position: absolute;
+            top: 155px;
+            width: 160px;
+            color: white;
+            font-size: 38px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #equipo1-abv {
+            left: -15px;
+            text-align: right;
+        }
+
+        #equipo2-abv {
+            right: 150px;
+            text-align: left;
+        }
+
+        /* Resultado en la caja verde */
+        .resultado {
+            position: absolute;
+            top: 132px;
+            left: 38%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 90px;
+            background: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 45px;
+            font-weight: bold;
+            color: black;
+        }
+
+        /* Rectángulos blancos finos */
+        .barra-equipo {
+            position: absolute;
+            top: 152px; /* Ajuste la posición vertical para que se vea mejor */
+            width: 15px;
+            height: 49px;
+            background-color: white;
+        }
+
+        #barra1 {
+            /* Posiciona la barra a la izquierda del bloque EQ1 (si existiera un bloque contenedor azul) */
+            /* La pongo cerca de donde comienza el marcador completo */
+            left: 198px; 
+        }
+
+        #barra2 {
+            /* Posiciona la barra a la derecha del bloque de tiempo */
+            /* La pongo cerca de donde termina el marcador completo */
+            right: 370px;
+        }
+
+        /* Cronómetro en el rectángulo blanco inferior */
+        .cronometro {
+            position: absolute;
+            bottom: 147px;
+            left: 86%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
+        }
+
+        .temporizador-extra {
+            position: absolute;
+            bottom: 155px;
+            left: 94%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 30px;
+            justify-self: start;
+            display: none;
+        }
+
+        select,
+        button {
+            margin: 10px;
+            padding: 8px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="marcador">
+        <div id="barra1" class="barra-equipo"></div>
+        <div id="barra2" class="barra-equipo"></div>
+
+        <div id="equipo1-abv" class="equipo-abv">EQ1</div>
+        <div id="equipo2-abv" class="equipo-abv">EQ2</div>
+
+        <div class="resultado" id="resultado">0 - 0</div>
+
+        <div class="cronometro" id="cronometro">15:00</div>
+        <div class="temporizador-extra" id="temporizador-extra">+0</div>
+    </div>
+
+    <div>
+        <label>Equipo 1:</label>
+        <select id="selectEquipo1">
+            <option value="">Seleccionar equipo 1</option>
+            <option value="JUV" data-color="#d9d9d9">Juventus</option>
+            <option value="FIO" data-color="#693de2">Fiorentina</option>
+            <option value="NAP" data-color="#009dff">Napoles</option>
+            <option value="INT" data-color="#0014cc">Inter</option>
+            <option value="ACM" data-color="#710b06">Milán</option>
+            <option value="TOR" data-color="#881f19">Torino</option>
+            <option value="LAZ" data-color="#00d9fc">Lazio</option>
+            <option value="PAL" data-color="#ee8eb0">Palermo</option>
+        </select>
+
+        <label>Equipo 2:</label>
+        <select id="selectEquipo2">
+            <option value="">Seleccionar equipo 2</option>
+            <option value="JUV" data-color="#d9d9d9">Juventus</option>
+            <option value="FIO" data-color="#693de2">Fiorentina</option>
+            <option value="NAP" data-color="#009dff">Napoles</option>
+            <option value="INT" data-color="#0014cc">Inter</option>
+            <option value="ACM" data-color="#710b06">Milán</option>
+            <option value="TOR" data-color="#881f19">Torino</option>
+            <option value="LAZ" data-color="#00d9fc">Lazio</option>
+            <option value="PAL" data-color="#ee8eb0">Palermo</option>
+        </select>
+        <br>
+
+        <button onclick="sumar(1)">+1 EQ1</button>
+        <button onclick="restar(1)">-1 EQ1</button>
+        <button onclick="sumar(2)">+1 EQ2</button>
+        <button onclick="restar(2)">-1 EQ2</button>
+        <br>
+        <button onclick="iniciar()">Iniciar</button>
+        <button onclick="detener()">Detener</button>
+        <button onclick="reiniciar()">Reiniciar</button>
+        <br>
+        <h2>Tiempo añadido</h2>
+        <button onclick="anadirTiempo(1)">+1</button>
+        <button onclick="anadirTiempo(2)">+2</button>
+        <button onclick="anadirTiempo(3)">+3</button>
+        <button onclick="anadirTiempo(4)">+4</button>
+        <button onclick="anadirTiempo(5)">+5</button>
+    </div>
+
+    <script>
+        let marcador1 = 0, marcador2 = 0;
+        let tiempo = 0, intervalo;
+        let tiempoExtra = 0;
+
+        const res = document.getElementById("resultado");
+        const cron = document.getElementById("cronometro");
+
+        function actualizarMarcador() {
+            res.textContent = `${marcador1} - ${marcador2}`;
+        }
+
+        function sumar(equipo) {
+            if (equipo === 1) marcador1++;
+            else marcador2++;
+            actualizarMarcador();
+        }
+
+        function restar(equipo) {
+            if (equipo === 1 && marcador1 > 0) marcador1--;
+            else if (equipo === 2 && marcador2 > 0) marcador2--;
+            actualizarMarcador();
+        }
+
+        function actualizarTiempo() {
+            let min = Math.floor(tiempo / 60);
+            let seg = tiempo % 60;
+            if (seg < 10) seg = "0" + seg;
+            if (min < 10) min = "0" + min;
+            cron.textContent = `${min}:${seg}`;
+        }
+
+        function actualizarTemporizadorExtra() {
+            document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+        }
+
+        function iniciar() {
+            if (intervalo) clearInterval(intervalo);
+            intervalo = setInterval(() => {
+                tiempo++;
+                actualizarTiempo();
+            }, 1000);
+        }
+
+        function detener() {
+            clearInterval(intervalo);
+        }
+
+        function reiniciar() {
+            clearInterval(intervalo);
+            tiempo = 0;
+            tiempoExtra = 0;
+            actualizarTiempo();
+            actualizarTemporizadorExtra();
+            document.getElementById("temporizador-extra").style.display = "none";
+            document.querySelector(".cronometro").style.left = "86%";
+        }
+
+        function anadirTiempo(min) {
+            tiempoExtra += min;
+            actualizarTemporizadorExtra();
+            document.getElementById("temporizador-extra").style.display = "block";
+            document.querySelector(".cronometro").style.left = "83%";
+        }
+
+        // Cambiar abreviaturas y colores laterales
+        document.getElementById("selectEquipo1").addEventListener("change", function () {
+            const abv = this.value;
+            const color = this.selectedOptions[0].dataset.color;
+            document.getElementById("equipo1-abv").textContent = abv || "EQ1";
+            document.getElementById("barra1").style.backgroundColor = color || "white";
+        });
+
+        document.getElementById("selectEquipo2").addEventListener("change", function () {
+            const abv = this.value;
+            const color = this.selectedOptions[0].dataset.color;
+            document.getElementById("equipo2-abv").textContent = abv || "EQ2";
+            document.getElementById("barra2").style.backgroundColor = color || "white";
+        });
+
+        actualizarMarcador();
+        actualizarTiempo();
+    </script>
+</body>
+
+</html>
