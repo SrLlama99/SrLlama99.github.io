@@ -126,7 +126,7 @@
 
         <div class="tiempo-container">
             <div class="temporizador-extra" id="temporizador-extra">+0</div>
-            <div class="temporizador" id="temporizador">15:00</div>
+            <div class="temporizador" id="temporizador">00:00</div>
         </div>
     </div>
 
@@ -175,7 +175,7 @@
 
     <script>
         let intervalo;
-        let tiempoRestante = 900;
+        let tiempoRestante = 0;
         let tiempoExtra = 0;
 
         function actualizarTemporizador() {
@@ -196,7 +196,7 @@
                     clearInterval(intervalo);
                     document.getElementById("temporizador").textContent = "Tiempo terminado";
                 } else {
-                    tiempoRestante--;
+                    tiempoRestante++;
                     actualizarTemporizador();
                 }
             }, 1000);
@@ -208,7 +208,7 @@
 
         function reiniciarTemporizador() {
             detenerTemporizador();
-            tiempoRestante = 900;
+            tiempoRestante = 0;
             tiempoExtra = 0;
             actualizarTemporizador();
             actualizarTemporizadorExtra();
@@ -229,7 +229,6 @@
 
         function anadirTiempo(minutos) {
             tiempoExtra += minutos;
-            tiempoRestante += minutos * 60;
             actualizarTemporizador();
             actualizarTemporizadorExtra();
             document.getElementById("temporizador-extra").style.display = "block";
@@ -253,3 +252,4 @@
     </script>
 </body>
 </html>
+
