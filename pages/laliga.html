@@ -194,7 +194,6 @@
             intervalo = setInterval(() => {
                     tiempoRestante++;
                     actualizarTemporizador();
-                }
             }, 1000);
         }
 
@@ -225,7 +224,6 @@
 
         function anadirTiempo(minutos) {
             tiempoExtra += minutos;
-            actualizarTemporizador();
             actualizarTemporizadorExtra();
             document.getElementById("temporizador-extra").style.display = "block";
             document.querySelector(".tiempo-container").style.top = "120px";
@@ -248,5 +246,6 @@
     </script>
 </body>
 </html>
+
 
 
