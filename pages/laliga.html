@@ -192,10 +192,6 @@
         function iniciarTemporizador() {
             if (intervalo) clearInterval(intervalo);
             intervalo = setInterval(() => {
-                if (tiempoRestante <= 0) {
-                    clearInterval(intervalo);
-                    document.getElementById("temporizador").textContent = "Tiempo terminado";
-                } else {
                     tiempoRestante++;
                     actualizarTemporizador();
                 }
@@ -252,4 +248,5 @@
     </script>
 </body>
 </html>
+
 
