@@ -173,7 +173,7 @@
 
     <script>
         let marcador1 = 0, marcador2 = 0;
-        let tiempo = 900, intervalo;
+        let tiempo = 0, intervalo;
         let tiempoExtra = 0;
 
         const res = document.getElementById("resultado");
@@ -210,7 +210,7 @@
         function iniciar() {
             if (intervalo) clearInterval(intervalo);
             intervalo = setInterval(() => {
-                tiempo--;
+                tiempo++;
                 actualizarTiempo();
             }, 1000);
         }
@@ -221,7 +221,7 @@
 
         function reiniciar() {
             clearInterval(intervalo);
-            tiempo = 900;
+            tiempo = 0;
             tiempoExtra = 0;
             actualizarTiempo();
             actualizarTemporizadorExtra();
@@ -231,7 +231,6 @@
 
         function anadirTiempo(min) {
             tiempoExtra += min;
-            tiempo += min * 60;
             actualizarTiempo();
             actualizarTemporizadorExtra();
             document.getElementById("temporizador-extra").style.display = "block";
@@ -260,3 +259,4 @@
 
 
 </html>
+
