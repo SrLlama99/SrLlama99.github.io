@@ -1,271 +1,314 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marcador LLF</title>
-    <style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marcador LLF</title>
+  <style>
+    @font-face {
+      font-family: 'LaLiga';
+      src: url('/fonts/LALIGAText-Bold.woff2') format('woff2');
+      font-display: swap;
+    }
 
-        @font-face {
-          font-family: 'LaLiga';
-          src:  url('/fonts/LALIGAText-Bold.woff2') format('woff2');
-          font-weight: normal;
-          font-style: normal;
-          font-display: swap;
-        }
-        
-        body {
-            font-family: 'LaLiga', Arial, sans-serif;
-            text-align: center;
-            background-color: #008F39;
-        }
+    body {
+      font-family: 'LaLiga', Arial, sans-serif;
+      text-align: center;
+      background-color: #008F39;
+      color: white;
+    }
 
+    .marcador {
+      position: relative;
+      width: 700px;
+      height: 350px;
+      margin: 40px auto;
+      background-image: url("/marcadores/copa.png");
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
 
-        .marcador {
-            position: relative;
-            width: 700px;
-            height: 350px;
-            margin: 40px auto;
-            background-image: url("/marcadores/copa.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
+    .equipo-abv {
+      position: absolute;
+      top: 153px;
+      width: 160px;
+      color: red;
+      font-size: 45px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
 
-        /* Abreviaturas */
-        .equipo-abv {
-            position: absolute;
-            top: 153px;
-            width: 160px;
-            color: red;
-            font-size: 45px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
+    #equipo1-abv { left: 42px; text-align: center; }
+    #equipo2-abv { right: 180px; text-align: left; }
 
-        #equipo1-abv {
-            left: 42px;
-            text-align: center;
-        }
+    .resultado {
+      position: absolute;
+      top: 135px;
+      left: 38%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 90px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 45px;
+      font-weight: bold;
+      color: white;
+    }
 
-        #equipo2-abv {
-            right: 180px;
-            text-align: left;
-        }
+    .barra-equipo {
+      position: absolute;
+      top: 155px;
+      width: 21px;
+      height: 57px;
+      background-color: white;
+    }
 
-        /* Resultado en la caja verde */
-        .resultado {
-            position: absolute;
-            top: 135px;
-            left: 38%;
-            transform: translateX(-50%);
-            width: 160px;
-            height: 90px;
-            background: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 45px;
-            font-weight: bold;
-            color: white;
-        }
+    #barra1 { left: 37px; }
+    #barra2 { right: 211px; }
 
-        /* Rectángulos blancos finos */
-        .barra-equipo {
-            position: absolute;
-            top: 155px;
-            /* Ajuste la posición vertical para que se vea mejor */
-            width: 21px;
-            height: 57px;
-            background-color: white;
-        }
+    .cronometro {
+      position: absolute;
+      bottom: 145px;
+      left: 80%;
+      transform: translateX(-50%);
+      color: red;
+      font-size: 38px;
+      font-weight: bold;
+    }
 
-        #barra1 {
-            /* Posiciona la barra a la izquierda del bloque EQ1 (si existiera un bloque contenedor azul) */
-            /* La pongo cerca de donde comienza el marcador completo */
-            left: 37px;
-        }
+    .temporizador-extra {
+      position: absolute;
+      bottom: 150px;
+      left: 88%;
+      transform: translateX(-50%);
+      color: red;
+      font-size: 28px;
+      display: none;
+    }
 
-        #barra2 {
-            /* Posiciona la barra a la derecha del bloque de tiempo */
-            /* La pongo cerca de donde termina el marcador completo */
-            right: 211px;
-        }
+    /* Botones de escudos */
+    .escudo-btn {
+      width: 80px;
+      height: 80px;
+      border: 3px solid white;
+      border-radius: 10px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+      margin: 10px;
+      display: inline-block;
+    }
 
-        /* Cronómetro en el rectángulo blanco inferior */
-        .cronometro {
-            position: absolute;
-            bottom: 145px;
-            left: 80%;
-            transform: translateX(-50%);
-            color: red;
-            font-size: 38px;
-            font-weight: bold;
-        }
+    /* Menú emergente */
+    .menu-escudos {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: blue;
+      border-radius: 15px;
+      padding: 20px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      z-index: 9999;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
 
-        .temporizador-extra {
-            position: absolute;
-            bottom: 150px;
-            left: 88%;
-            transform: translateX(-50%);
-            color: red;
-            font-size: 28px;
-            justify-self: start;
-            display: none;
-        }
+    .menu-escudos img {
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: transform 0.2s ease;
+    }
 
-        select,
-        button {
-            margin: 10px;
-            padding: 8px;
-            font-size: 16px;
-        }
-    </style>
+    .menu-escudos img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Fondo oscuro */
+    .fondo-oscuro {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      z-index: 999;
+    }
+
+    button {
+      margin: 8px;
+      padding: 8px 14px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      background: #004d1a;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #006d26;
+    }
+  </style>
 </head>
 
 <body>
+  <div class="marcador">
+    <div id="barra1" class="barra-equipo"></div>
+    <div id="barra2" class="barra-equipo"></div>
 
-    <div class="marcador">
-        <div id="barra1" class="barra-equipo"></div>
-        <div id="barra2" class="barra-equipo"></div>
+    <div id="equipo1-abv" class="equipo-abv">EQ1</div>
+    <div id="equipo2-abv" class="equipo-abv">EQ2</div>
 
-        <div id="equipo1-abv" class="equipo-abv">EQ1</div>
-        <div id="equipo2-abv" class="equipo-abv">EQ2</div>
+    <div class="resultado" id="resultado">0 - 0</div>
 
-        <div class="resultado" id="resultado">0 - 0</div>
+    <div class="cronometro" id="cronometro">00:00</div>
+    <div class="temporizador-extra" id="temporizador-extra">+0</div>
+  </div>
 
-        <div class="cronometro" id="cronometro">15:00</div>
-        <div class="temporizador-extra" id="temporizador-extra">+0</div>
-    </div>
+  <div>
+    <div id="equipo1Select" class="escudo-btn" style="background-image:url('/escudos/default.png')" onclick="abrirMenu(1)"></div>
+    <div id="equipo2Select" class="escudo-btn" style="background-image:url('/escudos/default.png')" onclick="abrirMenu(2)"></div>
+  </div>
 
-    <div>
-        <label>Equipo 1:</label>
-        <select id="selectEquipo1">
-            <option value="">Seleccionar equipo 1</option>
-            <option value="ATM" data-color="#e01f1a">Atleti</option>
-            <option value="MCF" data-color="#3498db">Málaga</option>
-            <option value="BET" data-color="#03da18">Betis</option>
-            <option value="VIL" data-color="#f1c40f">Villarreal</option>
-            <option value="ATH" data-color="#ff4040">Athletic Club</option>
-            <option value="RSO" data-color="#005ab9">Real Sociedad</option>
-            <option value="FCB" data-color="#8f1515">Barça</option>
-            <option value="RMA" data-color="#ffffff">Real Madrid</option>
-        </select>
+  <div>
+    <button onclick="sumar(1)">+1 EQ1</button>
+    <button onclick="restar(1)">-1 EQ1</button>
+    <button onclick="sumar(2)">+1 EQ2</button>
+    <button onclick="restar(2)">-1 EQ2</button>
+    <br>
+    <button onclick="iniciar()">Iniciar</button>
+    <button onclick="detener()">Detener</button>
+    <button onclick="reiniciar()">Reiniciar</button>
+    <br>
+    <h3>Tiempo añadido</h3>
+    <button onclick="anadirTiempo(1)">+1</button>
+    <button onclick="anadirTiempo(2)">+2</button>
+    <button onclick="anadirTiempo(3)">+3</button>
+    <button onclick="anadirTiempo(4)">+4</button>
+    <button onclick="anadirTiempo(5)">+5</button>
+  </div>
 
-        <label>Equipo 2:</label>
-        <select id="selectEquipo2">
-            <option value="ATM" data-color="#e01f1a">Atleti</option>
-            <option value="MCF" data-color="#3498db">Málaga</option>
-            <option value="BET" data-color="#03da18">Betis</option>
-            <option value="VIL" data-color="#f1c40f">Villarreal</option>
-            <option value="ATH" data-color="#ff4040">Athletic Club</option>
-            <option value="RSO" data-color="#005ab9">Real Sociedad</option>
-            <option value="FCB" data-color="#8f1515">Barça</option>
-            <option value="RMA" data-color="#ffffff">Real Madrid</option>
-        </select>
-        <br>
+  <script>
+    let marcador1 = 0, marcador2 = 0;
+    let tiempo = 0, intervalo;
+    let tiempoExtra = 0;
 
-        <button onclick="sumar(1)">+1 EQ1</button>
-        <button onclick="restar(1)">-1 EQ1</button>
-        <button onclick="sumar(2)">+1 EQ2</button>
-        <button onclick="restar(2)">-1 EQ2</button>
-        <br>
-        <button onclick="iniciar()">Iniciar</button>
-        <button onclick="detener()">Detener</button>
-        <button onclick="reiniciar()">Reiniciar</button>
-        <br>
-        <h2>Tiempo añadido</h2>
-        <button onclick="anadirTiempo(1)">+1</button>
-        <button onclick="anadirTiempo(2)">+2</button>
-        <button onclick="anadirTiempo(3)">+3</button>
-        <button onclick="anadirTiempo(4)">+4</button>
-        <button onclick="anadirTiempo(5)">+5</button>
-    </div>
+    const res = document.getElementById("resultado");
+    const cron = document.getElementById("cronometro");
 
-    <script>
-        let marcador1 = 0, marcador2 = 0;
-        let tiempo = 0, intervalo;
-        let tiempoExtra = 0;
+    const equipos = {
+      "ATM": { nombre: "Atleti", abv: "ATM", color: "#e01f1a", escudo: "/escudos/atlmadrid.png" },
+      "MCF": { nombre: "Málaga", abv: "MCF", color: "#3498db", escudo: "/escudos/malaga.png" },
+      "BET": { nombre: "Betis", abv: "BET", color: "#03da18", escudo: "/escudos/betis.png" },
+      "VIL": { nombre: "Villarreal", abv: "VIL", color: "#f1c40f", escudo: "/escudos/villarreal.png" },
+      "ATH": { nombre: "Athletic", abv: "ATH", color: "#ff4040", escudo: "/escudos/athletic.png" },
+      "RSO": { nombre: "R. Sociedad", abv: "RSO", color: "#005ab9", escudo: "/escudos/realsociedad.png" },
+      "FCB": { nombre: "Barça", abv: "FCB", color: "#8f1515", escudo: "/escudos/barcelona.png" },
+      "RMA": { nombre: "R. Madrid", abv: "RMA", color: "#ffffff", escudo: "/escudos/madrid.png" }
+    };
 
-        const res = document.getElementById("resultado");
-        const cron = document.getElementById("cronometro");
+    function actualizarMarcador() {
+      res.textContent = `${marcador1} ‎ ‎ ‎ ‎ ‎ ‎ ${marcador2}`;
+    }
 
-        function actualizarMarcador() {
-            res.textContent = `${marcador1} ‎ ‎ ‎ ‎ ‎ ‎ ${marcador2}`;
-        }
+    function sumar(equipo) {
+      if (equipo === 1) marcador1++;
+      else marcador2++;
+      actualizarMarcador();
+    }
 
-        function sumar(equipo) {
-            if (equipo === 1) marcador1++;
-            else marcador2++;
-            actualizarMarcador();
-        }
+    function restar(equipo) {
+      if (equipo === 1 && marcador1 > 0) marcador1--;
+      else if (equipo === 2 && marcador2 > 0) marcador2--;
+      actualizarMarcador();
+    }
 
-        function restar(equipo) {
-            if (equipo === 1 && marcador1 > 0) marcador1--;
-            else if (equipo === 2 && marcador2 > 0) marcador2--;
-            actualizarMarcador();
-        }
+    function actualizarTiempo() {
+      let min = Math.floor(tiempo / 60);
+      let seg = tiempo % 60;
+      if (seg < 10) seg = "0" + seg;
+      if (min < 10) min = "0" + min;
+      cron.textContent = `${min}:${seg}`;
+    }
 
-        function actualizarTiempo() {
-            let min = Math.floor(tiempo / 60);
-            let seg = tiempo % 60;
-            if (seg < 10) seg = "0" + seg;
-            if (min < 10) min = "0" + min;
-            cron.textContent = `${min}:${seg}`;
-        }
+    function actualizarTemporizadorExtra() {
+      document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+    }
 
-        function actualizarTemporizadorExtra() {
-            document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
-        }
-
-        function iniciar() {
-            if (intervalo) clearInterval(intervalo);
-            intervalo = setInterval(() => {
-                tiempo++;
-                actualizarTiempo();
-            }, 1000);
-        }
-
-        function detener() {
-            clearInterval(intervalo);
-        }
-
-        function reiniciar() {
-            clearInterval(intervalo);
-            tiempo = 0;
-            tiempoExtra = 0;
-            actualizarTiempo();
-            actualizarTemporizadorExtra();
-            document.getElementById("temporizador-extra").style.display = "none";
-            document.querySelector(".cronometro").style.left = "80%";
-        }
-
-        function anadirTiempo(min) {
-            tiempoExtra += min;
-            actualizarTemporizadorExtra();
-            document.getElementById("temporizador-extra").style.display = "block";
-            document.querySelector(".cronometro").style.left = "78%";
-        }
-
-        // Cambiar abreviaturas y colores laterales
-        document.getElementById("selectEquipo1").addEventListener("change", function () {
-            const abv = this.value;
-            const color = this.selectedOptions[0].dataset.color;
-            document.getElementById("equipo1-abv").textContent = abv || "EQ1";
-            document.getElementById("barra1").style.backgroundColor = color || "white";
-        });
-
-        document.getElementById("selectEquipo2").addEventListener("change", function () {
-            const abv = this.value;
-            const color = this.selectedOptions[0].dataset.color;
-            document.getElementById("equipo2-abv").textContent = abv || "EQ2";
-            document.getElementById("barra2").style.backgroundColor = color || "white";
-        });
-
-        actualizarMarcador();
+    function iniciar() {
+      if (intervalo) clearInterval(intervalo);
+      intervalo = setInterval(() => {
+        tiempo++;
         actualizarTiempo();
-    </script>
-</body>
+      }, 1000);
+    }
 
+    function detener() {
+      clearInterval(intervalo);
+    }
+
+    function reiniciar() {
+      clearInterval(intervalo);
+      tiempo = 0;
+      tiempoExtra = 0;
+      actualizarTiempo();
+      actualizarTemporizadorExtra();
+      document.getElementById("temporizador-extra").style.display = "none";
+      document.querySelector(".cronometro").style.left = "80%";
+    }
+
+    function anadirTiempo(min) {
+      tiempoExtra += min;
+      actualizarTemporizadorExtra();
+      document.getElementById("temporizador-extra").style.display = "block";
+      document.querySelector(".cronometro").style.left = "78%";
+    }
+
+    function abrirMenu(num) {
+      // Fondo oscuro
+      const fondo = document.createElement("div");
+      fondo.classList.add("fondo-oscuro");
+      fondo.onclick = () => {
+        fondo.remove();
+        menu.remove();
+      };
+
+      // Menú de escudos
+      const menu = document.createElement("div");
+      menu.classList.add("menu-escudos");
+
+      Object.keys(equipos).forEach(clave => {
+        const eq = equipos[clave];
+        const img = document.createElement("img");
+        img.src = eq.escudo;
+        img.alt = eq.nombre;
+        img.onclick = (e) => {
+          e.stopPropagation();
+          seleccionarEquipo(num, clave);
+          fondo.remove();
+          menu.remove();
+        };
+        menu.appendChild(img);
+      });
+
+      document.body.appendChild(fondo);
+      document.body.appendChild(menu);
+    }
+
+    function seleccionarEquipo(num, clave) {
+      const eq = equipos[clave];
+      document.getElementById(`equipo${num}-abv`).textContent = eq.abv;
+      document.getElementById(`barra${num}`).style.backgroundColor = eq.color;
+      document.getElementById(`equipo${num}Select`).style.backgroundImage = `url('${eq.escudo}')`;
+    }
+
+    actualizarMarcador();
+    actualizarTiempo();
+  </script>
+</body>
 </html>

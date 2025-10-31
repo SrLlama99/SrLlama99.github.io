@@ -102,23 +102,32 @@
 
         button {
             margin: 5px;
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 8px 15px;
+            font-size: 15px;
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #28a745;
+            background-color: #0d43d8;
             color: white;
+            transition: 0.2s;
         }
 
-        button:active {
-            background-color: #218838;
+        button:hover {
+            background-color: rgb(83, 83, 190);
         }
 
-        select {
-            padding: 5px 10px;
-            font-size: 16px;
-            margin: 5px;
+        .escudos {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 10px 0 25px;
+        }
+
+        .escudos button img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
     </style>
 </head>
@@ -155,34 +164,38 @@
         <button onclick="anadirTiempo(5)">+5</button>
     </div>
 
-    <h2>Escudos</h2>
-    <label>Equipo 1:</label>
-    <select id="selectEquipo1">
-        <option>Seleccionar escudo 1</option>
-        <option value="/escudos/madrid.png">Real Madrid</option>
-        <option value="/escudos/villarreal.png">Villarreal</option>
-        <option value="/escudos/barcelona.png">Barcelona</option>
-        <option value="/escudos/atlmadrid.png">Atléti</option>
-        <option value="/escudos/athletic.png">Athletic Club</option>
-        <option value="/escudos/betis.png">Betis</option>
-        <option value="/escudos/realsociedad.png">Real Sociedad</option>
-        <option value="/escudos/malaga.png">Málaga</option>
-    </select>
+    <h2>Escudos Equipo 1</h2>
+    <div class="escudos" id="botonesEquipo1"></div>
 
-    <label>Equipo 2:</label>
-    <select id="selectEquipo2">
-        <option>Seleccionar escudo 2</option>
-        <option value="/escudos/madrid.png">Real Madrid</option>
-        <option value="/escudos/villarreal.png">Villarreal</option>
-        <option value="/escudos/barcelona.png">Barcelona</option>
-        <option value="/escudos/atlmadrid.png">Atléti</option>
-        <option value="/escudos/athletic.png">Athletic Club</option>
-        <option value="/escudos/betis.png">Betis</option>
-        <option value="/escudos/realsociedad.png">Real Sociedad</option>
-        <option value="/escudos/malaga.png">Málaga</option>
-    </select>
+    <h2>Escudos Equipo 2</h2>
+    <div class="escudos" id="botonesEquipo2"></div>
 
     <script>
+        const equipos = [
+            { nombre: "Real Madrid", src: "/escudos/madrid.png" },
+            { nombre: "Villarreal", src: "/escudos/villarreal.png" },
+            { nombre: "Barcelona", src: "/escudos/barcelona.png" },
+            { nombre: "Atléti", src: "/escudos/atlmadrid.png" },
+            { nombre: "Athletic Club", src: "/escudos/athletic.png" },
+            { nombre: "Betis", src: "/escudos/betis.png" },
+            { nombre: "Real Sociedad", src: "/escudos/realsociedad.png" },
+            { nombre: "Málaga", src: "/escudos/malaga.png" }
+        ];
+
+        function crearBotonesEscudos(contenedorId, imgId) {
+            const contenedor = document.getElementById(contenedorId);
+            equipos.forEach(eq => {
+                const btn = document.createElement("button");
+                btn.innerHTML = `<img src="${eq.src}" alt="${eq.nombre}" title="${eq.nombre}">`;
+                btn.onclick = () => document.getElementById(imgId).src = eq.src;
+                contenedor.appendChild(btn);
+            });
+        }
+
+        crearBotonesEscudos("botonesEquipo1", "imgEquipo1");
+        crearBotonesEscudos("botonesEquipo2", "imgEquipo2");
+
+        // ==== TEMPORIZADOR ====
         let intervalo;
         let tiempoRestante = 0;
         let tiempoExtra = 0;
@@ -201,8 +214,8 @@
         function iniciarTemporizador() {
             if (intervalo) clearInterval(intervalo);
             intervalo = setInterval(() => {
-                    tiempoRestante++;
-                    actualizarTemporizador();
+                tiempoRestante++;
+                actualizarTemporizador();
             }, 1000);
         }
 
@@ -238,26 +251,8 @@
             document.querySelector(".tiempo-container").style.top = "120px";
         }
 
-        // === CAMBIAR ESCUDOS AUTOMÁTICAMENTE ===
-        const selectEquipo1 = document.getElementById("selectEquipo1");
-        const selectEquipo2 = document.getElementById("selectEquipo2");
-
-        selectEquipo1.addEventListener("change", () => {
-            document.getElementById("imgEquipo1").src = selectEquipo1.value;
-        });
-
-        selectEquipo2.addEventListener("change", () => {
-            document.getElementById("imgEquipo2").src = selectEquipo2.value;
-        });
-
         actualizarTemporizador();
         actualizarTemporizadorExtra();
     </script>
 </body>
 </html>
-
-
-
-
-
-
