@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador LLF</title>
     <style>
-
         @font-face {
             font-family: "Serie A";
             src: url("/fonts/PowerGrotesk-Regular.ttf") format("truetype");
@@ -72,7 +71,8 @@
         /* Rectángulos blancos finos */
         .barra-equipo {
             position: absolute;
-            top: 165px; /* Ajuste la posición vertical para que se vea mejor */
+            top: 165px;
+            /* Ajuste la posición vertical para que se vea mejor */
             width: 15px;
             height: 44px;
             background-color: white;
@@ -81,7 +81,7 @@
         #barra1 {
             /* Posiciona la barra a la izquierda del bloque EQ1 (si existiera un bloque contenedor azul) */
             /* La pongo cerca de donde comienza el marcador completo */
-            left: 210px; 
+            left: 210px;
         }
 
         #barra2 {
@@ -112,11 +112,51 @@
             display: none;
         }
 
-        select,
+        .equipos {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 10px;
+        }
+
+        .boton-escudo {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .boton-escudo:hover {
+            transform: scale(1.15);
+        }
+
+        .boton-escudo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 10px;
+            background: white;
+            padding: 5px;
+        }
+
         button {
-            margin: 10px;
-            padding: 8px;
+            margin: 5px;
+            padding: 10px 15px;
             font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background-color: #222;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: white;
         }
     </style>
 </head>
@@ -137,32 +177,11 @@
     </div>
 
     <div>
-        <label>Equipo 1:</label>
-        <select id="selectEquipo1">
-            <option value="">Seleccionar equipo 1</option>
-            <option value="JUV" data-color="#d9d9d9">Juventus</option>
-            <option value="FIO" data-color="#693de2">Fiorentina</option>
-            <option value="NAP" data-color="#009dff">Napoles</option>
-            <option value="INT" data-color="#0014cc">Inter</option>
-            <option value="ACM" data-color="#710b06">Milán</option>
-            <option value="TOR" data-color="#881f19">Torino</option>
-            <option value="LAZ" data-color="#00d9fc">Lazio</option>
-            <option value="PAL" data-color="#ee8eb0">Palermo</option>
-        </select>
+        <h2>Equipo 1</h2>
+        <div class="equipos" id="botonesEq1"></div>
 
-        <label>Equipo 2:</label>
-        <select id="selectEquipo2">
-            <option value="">Seleccionar equipo 2</option>
-            <option value="JUV" data-color="#d9d9d9">Juventus</option>
-            <option value="FIO" data-color="#693de2">Fiorentina</option>
-            <option value="NAP" data-color="#009dff">Napoles</option>
-            <option value="INT" data-color="#0014cc">Inter</option>
-            <option value="ACM" data-color="#710b06">Milán</option>
-            <option value="TOR" data-color="#881f19">Torino</option>
-            <option value="LAZ" data-color="#00d9fc">Lazio</option>
-            <option value="PAL" data-color="#ee8eb0">Palermo</option>
-        </select>
-        <br>
+        <h2>Equipo 2</h2>
+        <div class="equipos" id="botonesEq2"></div>
 
         <button onclick="sumar(1)">+1 EQ1</button>
         <button onclick="restar(1)">-1 EQ1</button>
@@ -182,6 +201,17 @@
     </div>
 
     <script>
+        // Lista de equipos con escudos
+        const equipos = [
+            { abv: "JUV", color: "#d9d9d9", escudo: "/escudos/juventus.png" },
+            { abv: "FIO", color: "#693de2", escudo: "/escudos/fiorentina.png" },
+            { abv: "NAP", color: "#009dff", escudo: "/escudos/napoli.png" },
+            { abv: "INT", color: "#0014cc", escudo: "/escudos/inter.png" },
+            { abv: "ACM", color: "#710b06", escudo: "/escudos/milan.png" },
+            { abv: "TOR", color: "#881f19", escudo: "/escudos/torino.png" },
+            { abv: "LAZ", color: "#00d9fc", escudo: "/escudos/lazio.png" },
+            { abv: "PAL", color: "#ee8eb0", escudo: "/escudos/palermo.png" },
+        ];
         let marcador1 = 0, marcador2 = 0;
         let tiempo = 0, intervalo;
         let tiempoExtra = 0;
@@ -247,19 +277,23 @@
         }
 
         // Cambiar abreviaturas y colores laterales
-        document.getElementById("selectEquipo1").addEventListener("change", function () {
-            const abv = this.value;
-            const color = this.selectedOptions[0].dataset.color;
-            document.getElementById("equipo1-abv").textContent = abv || "EQ1";
-            document.getElementById("barra1").style.backgroundColor = color || "white";
-        });
+        // Crear botones con escudos
+        function crearBotonesEquipos(containerId, equipoNum) {
+            const cont = document.getElementById(containerId);
+            equipos.forEach(eq => {
+                const btn = document.createElement("button");
+                btn.className = "boton-escudo";
+                btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}">`;
+                btn.onclick = () => {
+                    document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
+                    document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
+                };
+                cont.appendChild(btn);
+            });
+        }
 
-        document.getElementById("selectEquipo2").addEventListener("change", function () {
-            const abv = this.value;
-            const color = this.selectedOptions[0].dataset.color;
-            document.getElementById("equipo2-abv").textContent = abv || "EQ2";
-            document.getElementById("barra2").style.backgroundColor = color || "white";
-        });
+        crearBotonesEquipos("botonesEq1", 1);
+        crearBotonesEquipos("botonesEq2", 2);
 
         actualizarMarcador();
         actualizarTiempo();

@@ -88,7 +88,7 @@
       display: none;
     }
 
-    /* Botones de escudos */
+    /* Botones de escudo */
     .escudo-btn {
       width: 80px;
       height: 80px;
@@ -98,45 +98,18 @@
       background-repeat: no-repeat;
       background-position: center;
       cursor: pointer;
-      margin: 10px;
+      margin: 6px;
       display: inline-block;
+      transition: transform 0.2s;
+      background-color: blue;
     }
 
-    /* Menú emergente */
-    .menu-escudos {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: blue;
-      border-radius: 15px;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      z-index: 9999;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    .menu-escudos img {
-      width: 80px;
-      height: 80px;
-      cursor: pointer;
-      border-radius: 10px;
-      transition: transform 0.2s ease;
-    }
-
-    .menu-escudos img:hover {
+    .escudo-btn:hover {
       transform: scale(1.1);
     }
 
-    /* Fondo oscuro */
-    .fondo-oscuro {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      z-index: 999;
+    .fila-equipos {
+      margin-bottom: 15px;
     }
 
     button {
@@ -145,13 +118,13 @@
       font-size: 16px;
       border-radius: 8px;
       border: none;
-      background: #004d1a;
+      background: blue;
       color: white;
       cursor: pointer;
     }
 
     button:hover {
-      background: #006d26;
+      background: lightblue;
     }
   </style>
 </head>
@@ -170,10 +143,11 @@
     <div class="temporizador-extra" id="temporizador-extra">+0</div>
   </div>
 
-  <div>
-    <div id="equipo1Select" class="escudo-btn" style="background-image:url('/escudos/default.png')" onclick="abrirMenu(1)"></div>
-    <div id="equipo2Select" class="escudo-btn" style="background-image:url('/escudos/default.png')" onclick="abrirMenu(2)"></div>
-  </div>
+  <h3>Selecciona Equipo 1</h3>
+  <div class="fila-equipos" id="fila1"></div>
+
+  <h3>Selecciona Equipo 2</h3>
+  <div class="fila-equipos" id="fila2"></div>
 
   <div>
     <button onclick="sumar(1)">+1 EQ1</button>
@@ -269,42 +243,30 @@
       document.querySelector(".cronometro").style.left = "78%";
     }
 
-    function abrirMenu(num) {
-      // Fondo oscuro
-      const fondo = document.createElement("div");
-      fondo.classList.add("fondo-oscuro");
-      fondo.onclick = () => {
-        fondo.remove();
-        menu.remove();
-      };
+    // Generar botones de escudos
+    const fila1 = document.getElementById("fila1");
+    const fila2 = document.getElementById("fila2");
 
-      // Menú de escudos
-      const menu = document.createElement("div");
-      menu.classList.add("menu-escudos");
+    Object.keys(equipos).forEach(clave => {
+      const eq = equipos[clave];
 
-      Object.keys(equipos).forEach(clave => {
-        const eq = equipos[clave];
-        const img = document.createElement("img");
-        img.src = eq.escudo;
-        img.alt = eq.nombre;
-        img.onclick = (e) => {
-          e.stopPropagation();
-          seleccionarEquipo(num, clave);
-          fondo.remove();
-          menu.remove();
-        };
-        menu.appendChild(img);
-      });
+      const btn1 = document.createElement("div");
+      btn1.classList.add("escudo-btn");
+      btn1.style.backgroundImage = `url('${eq.escudo}')`;
+      btn1.onclick = () => seleccionarEquipo(1, clave);
+      fila1.appendChild(btn1);
 
-      document.body.appendChild(fondo);
-      document.body.appendChild(menu);
-    }
+      const btn2 = document.createElement("div");
+      btn2.classList.add("escudo-btn");
+      btn2.style.backgroundImage = `url('${eq.escudo}')`;
+      btn2.onclick = () => seleccionarEquipo(2, clave);
+      fila2.appendChild(btn2);
+    });
 
     function seleccionarEquipo(num, clave) {
       const eq = equipos[clave];
       document.getElementById(`equipo${num}-abv`).textContent = eq.abv;
       document.getElementById(`barra${num}`).style.backgroundColor = eq.color;
-      document.getElementById(`equipo${num}Select`).style.backgroundImage = `url('${eq.escudo}')`;
     }
 
     actualizarMarcador();
