@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,8 +40,15 @@
       text-transform: uppercase;
     }
 
-    #equipo1-abv { left: 42px; text-align: center; }
-    #equipo2-abv { right: 180px; text-align: left; }
+    #equipo1-abv {
+      left: 42px;
+      text-align: center;
+    }
+
+    #equipo2-abv {
+      right: 180px;
+      text-align: left;
+    }
 
     .resultado {
       position: absolute;
@@ -65,8 +73,13 @@
       background-color: white;
     }
 
-    #barra1 { left: 37px; }
-    #barra2 { right: 211px; }
+    #barra1 {
+      left: 37px;
+    }
+
+    #barra2 {
+      right: 211px;
+    }
 
     .cronometro {
       position: absolute;
@@ -149,6 +162,7 @@
   <h3>Selecciona Equipo 2</h3>
   <div class="fila-equipos" id="fila2"></div>
 
+
   <div>
     <button onclick="sumar(1)">+1 EQ1</button>
     <button onclick="restar(1)">-1 EQ1</button>
@@ -165,6 +179,10 @@
     <button onclick="anadirTiempo(3)">+3</button>
     <button onclick="anadirTiempo(4)">+4</button>
     <button onclick="anadirTiempo(5)">+5</button>
+    <br>
+    <a href="/index.html">
+      <button>Volver</button>
+    </a>
   </div>
 
   <script>
@@ -273,4 +291,5 @@
     actualizarTiempo();
   </script>
 </body>
+
 </html>

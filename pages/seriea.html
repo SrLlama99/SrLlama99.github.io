@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,8 +75,13 @@
       background-color: white;
     }
 
-    #barra1 { left: 198px; }
-    #barra2 { right: 370px; }
+    #barra1 {
+      left: 198px;
+    }
+
+    #barra2 {
+      right: 370px;
+    }
 
     .cronometro {
       position: absolute;
@@ -183,6 +189,10 @@
   <button onclick="anadirTiempo(3)">+3</button>
   <button onclick="anadirTiempo(4)">+4</button>
   <button onclick="anadirTiempo(5)">+5</button>
+  <br>
+  <a href="/index.html">
+    <button>Volver</button>
+  </a>
 
   <script>
     // Lista de equipos con escudos
@@ -283,4 +293,5 @@
     actualizarTiempo();
   </script>
 </body>
+
 </html>
