@@ -207,6 +207,7 @@
         function actualizarTemporizador() {
             let minutos = Math.floor(tiempoRestante / 60);
             let segundos = tiempoRestante % 60;
+            minutos = minutos < 10 ? "0" + minutos : minutos;
             segundos = segundos < 10 ? "0" + segundos : segundos;
             document.getElementById("temporizador").textContent = minutos + ":" + segundos;
         }
@@ -260,3 +261,4 @@
     </script>
 </body>
 </html>
+
