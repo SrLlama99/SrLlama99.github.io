@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Sorteo Jugadores</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div class="container">
+
+<h1>🎲 Sorteo de Jugadores</h1>
+
+<div class="bombos">
+    <div class="bombo">
+        <h2>Jugadores</h2>
+        <img src="./imgs/bombo.png" id="bomboJugador">
+        <button onclick="sacarJugador()">Sacar jugador</button>
+        <div class="resultado" id="jugadorActual"></div>
+    </div>
+
+    <div class="bombo">
+        <h2>Equipos</h2>
+        <img src="./imgs/bombo.png">
+        <button onclick="sacarEquipo()">Sacar equipo</button>
+        <div class="resultado" id="equipoActual"></div>
+    </div>
+</div>
+
+<div class="tables" id="tablaEquipos"></div>
+
+</div>
+
+<script>
+// =====================
+// DATOS INICIALES
+// =====================
+let jugadores = [
+    "Jugador 1","Jugador 2","Jugador 3","Jugador 4","Jugador 5",
+    "Jugador 6","Jugador 7","Jugador 8","Jugador 9","Jugador 10",
+    "Jugador 11","Jugador 12","Jugador 13","Jugador 14","Jugador 15"
+];
+
+let equipos = [
+    "Equipo A","Equipo B","Equipo C","Equipo D"
+];
+
+const MAX_JUGADORES = 14;
+
+let equiposData = {};
+equipos.forEach(e => equiposData[e] = []);
+
+// =====================
+// UI
+// =====================
+const jugadorDiv = document.getElementById("jugadorActual");
+const equipoDiv = document.getElementById("equipoActual");
+const tablaEquipos = document.getElementById("tablaEquipos");
+
+let jugadorSeleccionado = null;
+
+// =====================
+// FUNCIONES
+// =====================
+function randomIndex(arr) {
+    return Math.floor(Math.random() * arr.length);
+}
+
+function sacarJugador() {
+    if (jugadores.length === 0) {
+        jugadorDiv.textContent = "No quedan jugadores";
+        return;
+    }
+
+    const bombo = document.getElementById("bomboJugador");
+
+    bombo.classList.add("shake");
+    jugadorDiv.classList.remove("final");
+    jugadorDiv.classList.add("animating");
+
+    let vueltas = 20;
+    let i = 0;
+
+    const intervalo = setInterval(() => {
+        jugadorDiv.textContent = jugadores[randomIndex(jugadores)];
+        i++;
+
+        if (i >= vueltas) {
+            clearInterval(intervalo);
+
+            setTimeout(() => {
+                bombo.classList.remove("shake");
+
+                jugadorSeleccionado = jugadores.splice(randomIndex(jugadores), 1)[0];
+
+                jugadorDiv.textContent = jugadorSeleccionado;
+                jugadorDiv.classList.remove("animating");
+                jugadorDiv.classList.add("final");
+            }, 300);
+        }
+    }, 80);
+}
+
+
+function sacarEquipo() {
+    if (!jugadorSeleccionado) {
+        equipoDiv.textContent = "Saca un jugador primero";
+        return;
+    }
+
+    let equipo;
+    let intentos = 0;
+
+    do {
+        equipo = equipos[randomIndex(equipos)];
+        intentos++;
+        if (intentos > 20) {
+            equipoDiv.textContent = "Todos los equipos llenos";
+            return;
+        }
+    } while (equiposData[equipo].length >= MAX_JUGADORES);
+
+    equiposData[equipo].push(jugadorSeleccionado);
+    equipoDiv.textContent = equipo;
+
+    jugadorSeleccionado = null;
+    jugadorDiv.textContent = "";
+
+    renderEquipos();
+}
+
+function renderEquipos() {
+    tablaEquipos.innerHTML = "";
+
+    for (let equipo in equiposData) {
+        const div = document.createElement("div");
+        div.className = "team";
+
+        let html = `<h3>${equipo} (${equiposData[equipo].length}/14)</h3><ul>`;
+        equiposData[equipo].forEach(j => {
+            html += `<li>${j}</li>`;
+        });
+        html += "</ul>";
+
+        div.innerHTML = html;
+        tablaEquipos.appendChild(div);
+    }
+}
+
+// Render inicial
+renderEquipos();
+</script>
+</body>
+</html>
