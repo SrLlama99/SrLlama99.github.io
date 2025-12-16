@@ -5,141 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Marcador LLF</title>
-  <style>
-    @font-face {
-      font-family: 'LaLiga';
-      src: url('/fonts/LALIGAText-Bold.woff2') format('woff2');
-      font-display: swap;
-    }
-
-    body {
-      font-family: 'LaLiga', Arial, sans-serif;
-      text-align: center;
-      background-color: #008F39;
-      color: white;
-    }
-
-    .marcador {
-      position: relative;
-      width: 700px;
-      height: 350px;
-      margin: 40px auto;
-      background-image: url("/marcadores/copa.png");
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-
-    .equipo-abv {
-      position: absolute;
-      top: 153px;
-      width: 160px;
-      color: red;
-      font-size: 45px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    #equipo1-abv {
-      left: 42px;
-      text-align: center;
-    }
-
-    #equipo2-abv {
-      right: 180px;
-      text-align: left;
-    }
-
-    .resultado {
-      position: absolute;
-      top: 135px;
-      left: 38%;
-      transform: translateX(-50%);
-      width: 160px;
-      height: 90px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 45px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .barra-equipo {
-      position: absolute;
-      top: 155px;
-      width: 21px;
-      height: 57px;
-      background-color: white;
-    }
-
-    #barra1 {
-      left: 37px;
-    }
-
-    #barra2 {
-      right: 211px;
-    }
-
-    .cronometro {
-      position: absolute;
-      bottom: 145px;
-      left: 80%;
-      transform: translateX(-50%);
-      color: red;
-      font-size: 38px;
-      font-weight: bold;
-    }
-
-    .temporizador-extra {
-      position: absolute;
-      bottom: 150px;
-      left: 88%;
-      transform: translateX(-50%);
-      color: red;
-      font-size: 28px;
-      display: none;
-    }
-
-    /* Botones de escudo */
-    .escudo-btn {
-      width: 80px;
-      height: 80px;
-      border: 3px solid white;
-      border-radius: 10px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      cursor: pointer;
-      margin: 6px;
-      display: inline-block;
-      transition: transform 0.2s;
-      background-color: blue;
-    }
-
-    .escudo-btn:hover {
-      transform: scale(1.1);
-    }
-
-    .fila-equipos {
-      margin-bottom: 15px;
-    }
-
-    button {
-      margin: 8px;
-      padding: 8px 14px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: none;
-      background: blue;
-      color: white;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: lightblue;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/copa.css">
 </head>
 
 <body>
@@ -180,7 +46,7 @@
     <button onclick="anadirTiempo(4)">+4</button>
     <button onclick="anadirTiempo(5)">+5</button>
     <br>
-    <a href="/index.html">
+    <a href="../marcadores.html">
       <button>Volver</button>
     </a>
   </div>
@@ -194,14 +60,14 @@
     const cron = document.getElementById("cronometro");
 
     const equipos = {
-      "ATM": { nombre: "Atleti", abv: "ATM", color: "#e01f1a", escudo: "/escudos/atlmadrid.png" },
-      "MCF": { nombre: "Málaga", abv: "MCF", color: "#3498db", escudo: "/escudos/malaga.png" },
-      "BET": { nombre: "Betis", abv: "BET", color: "#03da18", escudo: "/escudos/betis.png" },
-      "VIL": { nombre: "Villarreal", abv: "VIL", color: "#f1c40f", escudo: "/escudos/villarreal.png" },
-      "ATH": { nombre: "Athletic", abv: "ATH", color: "#ff4040", escudo: "/escudos/athletic.png" },
-      "RSO": { nombre: "R. Sociedad", abv: "RSO", color: "#005ab9", escudo: "/escudos/realsociedad.png" },
-      "FCB": { nombre: "Barça", abv: "FCB", color: "#8f1515", escudo: "/escudos/barcelona.png" },
-      "RMA": { nombre: "R. Madrid", abv: "RMA", color: "#ffffff", escudo: "/escudos/madrid.png" }
+      "ATM": { nombre: "Atleti", abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atlmadrid.png" },
+      "MCF": { nombre: "Málaga", abv: "MCF", color: "#3498db", escudo: "../imgs/escudos/malaga.png" },
+      "BET": { nombre: "Betis", abv: "BET", color: "#03da18", escudo: "../imgs/escudos/betis.png" },
+      "VIL": { nombre: "Villarreal", abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villarreal.png" },
+      "ATH": { nombre: "Athletic", abv: "ATH", color: "#ff4040", escudo: "../imgs/escudos/athletic.png" },
+      "RSO": { nombre: "R. Sociedad", abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/realsociedad.png" },
+      "FCB": { nombre: "Barça", abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barcelona.png" },
+      "RMA": { nombre: "R. Madrid", abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/madrid.png" }
     };
 
     function actualizarMarcador() {

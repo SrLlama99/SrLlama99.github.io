@@ -1,0 +1,63 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+}
+
+/* Contenedor del menú */
+.menu {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 25px 40px;
+    border-radius: 16px;
+    display: flex;
+    gap: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* Enlaces */
+.menu a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Hover elegante */
+.menu a:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-3px);
+}
+
+/* Efecto activo */
+.menu a:active {
+    transform: translateY(0);
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .menu {
+        flex-direction: column;
+        width: 80%;
+        text-align: center;
+    }
+
+    .menu a {
+        width: 100%;
+    }
+}

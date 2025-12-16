@@ -5,160 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador LLF</title>
-    <style>
-        @font-face {
-            font-family: "Serie A";
-            src: url("/fonts/PowerGrotesk-Regular.ttf") format("truetype");
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            font-family: "Serie A", Arial, sans-serif;
-            background-color: green;
-            text-align: center;
-        }
-
-        .marcador {
-            position: relative;
-            width: 700px;
-            height: 350px;
-            margin: 40px auto;
-            background-image: url("/marcadores/supercoppa.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        /* Abreviaturas */
-        .equipo-abv {
-            position: absolute;
-            top: 144px;
-            width: 160px;
-            color: white;
-            font-size: 45px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        #equipo1-abv {
-            left: 260px;
-            text-align: center;
-        }
-
-        #equipo2-abv {
-            right: -14px;
-            text-align: left;
-        }
-
-        /* Resultado en la caja verde */
-        .resultado {
-            position: absolute;
-            top: 126px;
-            left: 67%;
-            transform: translateX(-50%);
-            width: 160px;
-            height: 90px;
-            background: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 50px;
-            font-weight: bold;
-            color: #2B5AFE;
-        }
-
-        /* Rectángulos blancos finos */
-        .barra-equipo {
-            position: absolute;
-            top: 140px;
-            /* Ajuste la posición vertical para que se vea mejor */
-            width: 21px;
-            height: 69px;
-            background-color: red;
-        }
-
-        #barra1 {
-            /* Posiciona la barra a la izquierda del bloque EQ1 (si existiera un bloque contenedor azul) */
-            /* La pongo cerca de donde comienza el marcador completo */
-            left: 395px;
-        }
-
-        #barra2 {
-            /* Posiciona la barra a la derecha del bloque de tiempo */
-            /* La pongo cerca de donde termina el marcador completo */
-            right: 159px;
-        }
-
-        /* Cronómetro en el rectángulo blanco inferior */
-        .cronometro {
-            position: absolute;
-            bottom: 150px;
-            left: 27%;
-            transform: translateX(-50%);
-            color: #2B5AFE;
-            font-size: 50px;
-            font-weight: bold;
-        }
-
-        .temporizador-extra {
-            position: absolute;
-            bottom: 155px;
-            left: 18%;
-            transform: translateX(-50%);
-            color: darkblue;
-            font-size: 35px;
-            justify-self: start;
-            display: none;
-        }
-
-        .equipos {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .boton-escudo {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .boton-escudo:hover {
-            transform: scale(1.15);
-        }
-
-        .boton-escudo img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            border-radius: 10px;
-            background: white;
-            padding: 5px;
-        }
-
-        button {
-            margin: 5px;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background-color: #222;
-        }
-
-        h2 {
-            margin-top: 20px;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/supercoppa.css">
 </head>
 
 <body>
@@ -200,21 +47,21 @@
         <button onclick="anadirTiempo(4)">+4</button>
         <button onclick="anadirTiempo(5)">+5</button>
         <br>
-        <a href="/index.html">
+        <a href="../marcadores.html">
             <button>Volver</button>
         </a>
     </div>
 
     <script>
         const equipos = [
-            { abv: "JUV", color: "#d9d9d9", escudo: "/escudos/juventus.png" },
-            { abv: "FIO", color: "#693de2", escudo: "/escudos/fiorentina.png" },
-            { abv: "NAP", color: "#009dff", escudo: "/escudos/napoli.png" },
-            { abv: "INT", color: "#0014cc", escudo: "/escudos/inter.png" },
-            { abv: "ACM", color: "#710b06", escudo: "/escudos/milan.png" },
-            { abv: "TOR", color: "#881f19", escudo: "/escudos/torino.png" },
-            { abv: "LAZ", color: "#00d9fc", escudo: "/escudos/lazio.png" },
-            { abv: "PAL", color: "#ee8eb0", escudo: "/escudos/palermo.png" },
+            { abv: "JUV", color: "#d9d9d9", escudo: "../imgs/escudos/juventus.png" },
+            { abv: "FIO", color: "#693de2", escudo: "../imgs/escudos/fiorentina.png" },
+            { abv: "NAP", color: "#009dff", escudo: "../imgs/escudos/napoli.png" },
+            { abv: "INT", color: "#0014cc", escudo: "../imgs/escudos/inter.png" },
+            { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png" },
+            { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png" },
+            { abv: "LAZ", color: "#00d9fc", escudo: "../imgs/escudos/lazio.png" },
+            { abv: "PAL", color: "#ee8eb0", escudo: "../imgs/escudos/palermo.png" },
         ];
 
         let marcador1 = 0, marcador2 = 0;
