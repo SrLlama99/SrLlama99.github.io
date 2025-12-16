@@ -1,0 +1,122 @@
+@font-face {
+    font-family: 'LaLiga';
+    src: url('../fonts/LALIGAText-Bold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'LaLiga', Arial, sans-serif;
+    text-align: center;
+    background-color: #008F39;
+}
+
+.marcador {
+    position: relative;
+    width: 500px;
+    height: 250px;
+    margin: 50px auto;
+    background-image: url("../imgs/marcadores/laliga.png");
+    background-size: 155%;
+    background-position: -170px;
+    display: grid;
+    grid-template-columns: 1fr 0.5fr 0.5fr;
+    grid-template-rows: 1fr 1fr;
+    overflow: hidden;
+}
+
+.equipo-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin: auto;
+    display: block;
+}
+
+#imgEquipo1 {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#imgEquipo2 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.puntaje {
+    font-size: 64px;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    line-height: 120px;
+}
+
+#puntaje1 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+#puntaje2 {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+.tiempo-container {
+    position: absolute;
+    top: 140px;
+    right: 250px;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.temporizador {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.temporizador-extra {
+    font-size: 30px;
+    grid-column: span 3;
+    justify-self: start;
+    display: none;
+}
+
+.control-temporizador {
+    margin-top: 20px;
+}
+
+button {
+    margin: 5px;
+    padding: 8px 15px;
+    font-size: 15px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: #0d43d8;
+    color: white;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: rgb(83, 83, 190);
+}
+
+.escudos {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 10px 0 25px;
+}
+
+.escudos button img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}

@@ -1,0 +1,142 @@
+@font-face {
+    font-family: 'LaLiga';
+    src: url('../fonts/LALIGAText-Bold.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'LaLiga', Arial, sans-serif;
+    text-align: center;
+    background-color: #008F39;
+    color: white;
+}
+
+.marcador {
+    position: relative;
+    width: 700px;
+    height: 350px;
+    margin: 40px auto;
+    background-image: url("../imgs/marcadores/supercopa.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.equipo-abv {
+    position: absolute;
+    top: 128px;
+    width: 160px;
+    color: red;
+    font-size: 45px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#equipo1-abv {
+    left: 42px;
+    text-align: center;
+}
+
+#equipo2-abv {
+    right: 164px;
+    text-align: left;
+}
+
+.resultado {
+    position: absolute;
+    top: 108px;
+    left: 39%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    font-weight: bold;
+    color: white;
+}
+
+.barra-equipo {
+    position: absolute;
+    top: 125px;
+    width: 21px;
+    height: 59px;
+    background-color: white;
+}
+
+#barra1 {
+    left: 35px;
+}
+
+#barra2 {
+    right: 190px;
+}
+
+.cronometro {
+    position: absolute;
+    bottom: 170px;
+    left: 84%;
+    transform: translateX(-50%);
+    color: red;
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.temporizador-extra {
+    position: absolute;
+    bottom: 175px;
+    left: 92%;
+    transform: translateX(-50%);
+    color: red;
+    font-size: 28px;
+    display: none;
+}
+
+.equipos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 10px auto;
+    width: 80%;
+}
+
+.boton-equipo {
+    border: 3px solid white;
+    border-radius: 8px;
+    background-color: #004d1a;
+    cursor: pointer;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.boton-equipo:hover {
+    background-color: #006622;
+    transform: scale(1.05);
+}
+
+.boton-equipo img {
+    width: 60px;
+    height: 60px;
+    display: block;
+    margin: auto;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: 2px solid white;
+    border-radius: 6px;
+    background: #004d1a;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #006622;
+}

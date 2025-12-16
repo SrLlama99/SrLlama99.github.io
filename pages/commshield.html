@@ -5,160 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marcador LLF</title>
-    <style>
-        @font-face {
-            font-family: "Premier";
-            src: url("/fonts/PremierLeague-Bold.ttf") format("truetype");
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        body {
-            font-family: "Premier", Arial, sans-serif;
-            background-color: green;
-            text-align: center;
-        }
-
-        .marcador {
-            position: relative;
-            width: 700px;
-            height: 350px;
-            margin: 40px auto;
-            background-image: url("/marcadores/comshield.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        /* Abreviaturas */
-        .equipo-abv {
-            position: absolute;
-            top: 144px;
-            width: 160px;
-            color: red;
-            font-size: 45px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        #equipo1-abv {
-            left: 90px;
-            text-align: center;
-        }
-
-        #equipo2-abv {
-            right: 180px;
-            text-align: left;
-        }
-
-        /* Resultado en la caja verde */
-        .resultado {
-            position: absolute;
-            top: 126px;
-            left: 41%;
-            transform: translateX(-50%);
-            width: 160px;
-            height: 90px;
-            background: transparent;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            font-weight: bold;
-            color: white;
-        }
-
-        /* Rectángulos blancos finos */
-        .barra-equipo {
-            position: absolute;
-            top: 196px;
-            /* Ajuste la posición vertical para que se vea mejor */
-            width: 140px;
-            height: 6px;
-            background-color: blue;
-        }
-
-        #barra1 {
-            /* Posiciona la barra a la izquierda del bloque EQ1 (si existiera un bloque contenedor azul) */
-            /* La pongo cerca de donde comienza el marcador completo */
-            left: 95px;
-        }
-
-        #barra2 {
-            /* Posiciona la barra a la derecha del bloque de tiempo */
-            /* La pongo cerca de donde termina el marcador completo */
-            right: 225px;
-        }
-
-        /* Cronómetro en el rectángulo blanco inferior */
-        .cronometro {
-            position: absolute;
-            bottom: 155px;
-            left: 77%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 42px;
-            font-weight: bold;
-        }
-
-        .temporizador-extra {
-            position: absolute;
-            bottom: 147px;
-            left: 77%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 20px;
-            justify-self: start;
-            display: none;
-        }
-
-        .equipos {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 10px;
-        }
-
-        .boton-escudo {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .boton-escudo:hover {
-            transform: scale(1.15);
-        }
-
-        .boton-escudo img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            border-radius: 10px;
-            background: white;
-            padding: 5px;
-        }
-
-        button {
-            margin: 5px;
-            padding: 10px 15px;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background-color: #222;
-        }
-
-        h2 {
-            margin-top: 20px;
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/commshield.css">
 </head>
 
 <body>
@@ -201,21 +48,21 @@
         <button onclick="anadirTiempo(5)">+5</button>
 
         <br>
-        <a href="/index.html">
+        <a href="../marcadores.html">
             <button>Volver</button>
         </a>
     </div>
 
     <script>
         const equipos = [
-            { abv: "ARS", color: "#992d22", escudo: "/escudos/arsenal.png" },
-            { abv: "AST", color: "#ad1457", escudo: "/escudos/astonvilla.png" },
-            { abv: "CHE", color: "#0039ce", escudo: "/escudos/chelsea.png" },
-            { abv: "EVE", color: "#0242a1", escudo: "/escudos/everton.png" },
-            { abv: "LIV", color: "#831f18", escudo: "/escudos/liverpool.png" },
-            { abv: "MUN", color: "#d50032", escudo: "/escudos/manu.png" },
-            { abv: "MCI", color: "#69acd8", escudo: "/escudos/manc.png" },
-            { abv: "NEW", color: "#524949", escudo: "/escudos/newcastle.png" },
+            { abv: "ARS", color: "#992d22", escudo: "../imgs/escudos/arsenal.png" },
+            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png" },
+            { abv: "CHE", color: "#0039ce", escudo: "../imgs/escudos/chelsea.png" },
+            { abv: "EVE", color: "#0242a1", escudo: "../imgs/escudos/everton.png" },
+            { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png" },
+            { abv: "MUN", color: "#d50032", escudo: "../imgs/escudos/manu.png" },
+            { abv: "MCI", color: "#69acd8", escudo: "../imgs/escudos/manc.png" },
+            { abv: "NEW", color: "#524949", escudo: "../imgs/escudos/newcastle.png" },
         ];
 
         let marcador1 = 0, marcador2 = 0;
