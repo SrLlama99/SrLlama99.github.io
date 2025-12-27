@@ -89,7 +89,7 @@ body {
     bottom: 160px;
     left: 26%;
     transform: translateX(-50%);
-    color: blue;
+    color: #0039ce;
     font-size: 45px;
     font-weight: bold;
 }
@@ -168,7 +168,7 @@ h2 {
     height: 18%;
     /* Misma altura que el marcador */
     background-color: white;
-    color: blue;
+    color: #0039ce;
     /* Color oscuro para contraste */
     display: flex;
     align-items: center;
