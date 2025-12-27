@@ -20,6 +20,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    display: inline-block;
 }
 
 /* Abreviaturas */
@@ -93,22 +94,11 @@ body {
     font-weight: bold;
 }
 
-.temporizador-extra {
-    position: absolute;
-    bottom: 166px;
-    left: 18%;
-    transform: translateX(-50%);
-    color: blue;
-    font-size: 35px;
-    justify-self: start;
-    display: none;
-}
-
 .equipos {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
     margin-top: 10px;
 }
 
@@ -149,4 +139,46 @@ button:hover {
 h2 {
     margin-top: 20px;
     color: white;
+}
+
+/* ESTILO PARA EL TIEMPO EXTRA (Cuadrado azul debajo) */
+.temporizador-extra {
+    position: absolute;
+    top: 56%;
+    /* Lo empuja justo debajo del marcador */
+    left: 102px;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #0039ce;
+    /* Azul igual que el banner */
+    color: white;
+    padding: 8px 66px;
+    font-weight: bold;
+    font-size: 35px;
+    z-index: 10;
+    display: none;
+    /* Oculto por defecto */
+}
+
+/* ESTILO PARA EL GLOBAL (Rectángulo blanco a la derecha) */
+.resultado-global {
+    position: absolute;
+    top: 38%;
+    left: 93%;
+    /* Lo empuja totalmente a la derecha del marcador */
+    height: 18%;
+    /* Misma altura que el marcador */
+    background-color: white;
+    color: blue;
+    /* Color oscuro para contraste */
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    font-weight: bold;
+    font-size: 45px;
+    white-space: nowrap;
+    /* Evita que el texto salte de línea */
+    display: none;
+    /* Oculto por defecto */
+    border-left: 1px solid #ccc;
+    /* Separador sutil */
 }
