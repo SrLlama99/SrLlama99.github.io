@@ -13,6 +13,7 @@ body {
 
 .marcador {
     position: relative;
+    z-index: 10;
     width: 700px;
     height: 350px;
     margin: 40px auto;
@@ -131,8 +132,21 @@ h2 {
     padding: 8px 47px;
     font-weight: bold;
     font-size: 35px;
-    z-index: 10;
-    display: none;
+     z-index: -1; /* Se coloca DETRÁS del marcador azul */
+    
+    /* Estado inicial: invisible y "subido" hacia arriba */
+    opacity: 0;
+    transform: translateY(-100%); 
+    
+    /* La transición define la velocidad y suavidad */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    /* El cubic-bezier le da un pequeño efecto de rebote al final, muy "TV" */
+}
+
+/* Esta es la clase que pondremos con JS para mostrarlo */
+.temporizador-extra.activo {
+    opacity: 1;
+    transform: translateY(0); /* Vuelve a su sitio original bajando */
     /* Oculto por defecto */
 }
 

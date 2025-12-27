@@ -130,7 +130,8 @@
             tiempoExtra += min;
             actualizarTemporizadorExtra();
             // Solo mostramos el cuadro azul (display block) no movemos nada mas
-            extraDiv.style.display = "block";
+            extraDiv.classList.add("activo");
+
         }
 
         // --- LÓGICA DE GLOBAL (AGGREGATE) NUEVA ---
@@ -181,7 +182,7 @@
             actualizarTiempo();
 
             // Ocultar el extra al reiniciar
-            extraDiv.style.display = "none";
+            extraDiv.classList.remove("activo");
         }
 
         // ... (Tu función crearBotonesEquipos sigue igual) ...
