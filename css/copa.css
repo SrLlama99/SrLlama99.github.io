@@ -26,10 +26,11 @@ body {
     position: absolute;
     top: 153px;
     width: 160px;
-    color: red;
+    color: #FF1D1F;
     font-size: 45px;
     font-weight: bold;
     text-transform: uppercase;
+    display: inline-block;
 }
 
 #equipo1-abv {
@@ -78,19 +79,9 @@ body {
     bottom: 145px;
     left: 80%;
     transform: translateX(-50%);
-    color: red;
+    color: #FF1D1F;
     font-size: 38px;
     font-weight: bold;
-}
-
-.temporizador-extra {
-    position: absolute;
-    bottom: 150px;
-    left: 88%;
-    transform: translateX(-50%);
-    color: red;
-    font-size: 28px;
-    display: none;
 }
 
 /* Botones de escudo */
@@ -130,4 +121,45 @@ button {
 
 button:hover {
     background: lightblue;
+}
+
+.temporizador-extra {
+    position: absolute;
+    top: 44%;
+    /* Lo empuja justo debajo del marcador */
+    left: 91%;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #FF1D1F;
+    /* Azul igual que el banner */
+    color: #FFFFFF;
+    padding: 7px 5px;
+    font-weight: bold;
+    font-size: 35px;
+    z-index: 10;
+    display: none;
+    /* Oculto por defecto */
+}
+
+/* ESTILO PARA EL GLOBAL (Rectángulo blanco a la derecha) */
+.resultado-global {
+    position: absolute;
+    top: 60%;
+    left: 27%;
+    /* Lo empuja totalmente a la derecha del marcador */
+    height: 13%;
+    /* Misma altura que el marcador */
+    background-color: white;
+    color: #FF1D1F;
+    /* Color oscuro para contraste */
+    display: flex;
+    align-items: center;
+    width: 13%;
+    padding: 0 29px;
+    font-weight: bold;
+    font-size: 40px;
+    white-space: nowrap;
+    /* Evita que el texto salte de línea */
+    display: none;
+    /* Oculto por defecto */
+    /* Separador sutil */
 }

@@ -20,6 +20,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+    display: inline-block;
 }
 
 /* Abreviaturas */
@@ -57,7 +58,7 @@ body {
     align-items: center;
     font-size: 38px;
     font-weight: bold;
-    color: darkred;
+    color: #8E0E0D;
 }
 
 /* Rectángulos blancos finos */
@@ -91,17 +92,6 @@ body {
     color: white;
     font-size: 40px;
     font-weight: bold;
-}
-
-.temporizador-extra {
-    position: absolute;
-    bottom: 146px;
-    left: 88%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 25px;
-    justify-self: start;
-    display: none;
 }
 
 .equipos {
@@ -149,4 +139,44 @@ button:hover {
 h2 {
     margin-top: 20px;
     color: white;
+}
+.temporizador-extra {
+    position: absolute;
+    top: 48%;
+    /* Lo empuja justo debajo del marcador */
+    left: 91%;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #FF3131;
+    /* Azul igual que el banner */
+    color: #FFFFFF;
+    padding: 0px 5px;
+    font-weight: bold;
+    font-size: 35px;
+    z-index: 10;
+    display: none;
+    /* Oculto por defecto */
+}
+
+/* ESTILO PARA EL GLOBAL (Rectángulo blanco a la derecha) */
+.resultado-global {
+    position: absolute;
+    top: 60%;
+    left: 30%;
+    /* Lo empuja totalmente a la derecha del marcador */
+    height: 10%;
+    /* Misma altura que el marcador */
+    background-color: #8E0E0D;
+    color: white;
+    /* Color oscuro para contraste */
+    display: flex;
+    align-items: center;
+    width: 12%;
+    padding: 0 17px;
+    font-weight: bold;
+    font-size: 30px;
+    white-space: nowrap;
+    /* Evita que el texto salte de línea */
+    display: none;
+    /* Oculto por defecto */
+    /* Separador sutil */
 }

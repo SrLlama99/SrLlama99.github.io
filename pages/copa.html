@@ -20,6 +20,8 @@
 
     <div class="cronometro" id="cronometro">00:00</div>
     <div class="temporizador-extra" id="temporizador-extra">+0</div>
+
+    <div class="resultado-global" id="resultado-global">(0-0)</div>
   </div>
 
   <h3>Selecciona Equipo 1</h3>
@@ -27,6 +29,19 @@
 
   <h3>Selecciona Equipo 2</h3>
   <div class="fila-equipos" id="fila2"></div>
+  <h2>Configuración Global (Ida)</h2>
+  <div style="margin-bottom: 10px;">
+    <label>Ida Eq1: </label>
+    <input type="number" id="inputIda1" value="0" style="width: 50px;">
+
+    <label>Ida Eq2: </label>
+    <input type="number" id="inputIda2" value="0" style="width: 50px;">
+
+    <button onclick="fijarIda()">Actualizar Datos Ida</button>
+  </div>
+
+  <button onclick="toggleGlobal()">Mostrar/Ocultar Global</button>
+  <br>
 
 
   <div>
@@ -53,11 +68,14 @@
 
   <script>
     let marcador1 = 0, marcador2 = 0;
+    let ida1 = 0, ida2 = 0;
     let tiempo = 0, intervalo;
     let tiempoExtra = 0;
 
     const res = document.getElementById("resultado");
     const cron = document.getElementById("cronometro");
+    const extraDiv = document.getElementById("temporizador-extra"); // Referencia nueva
+    const globalDiv = document.getElementById("resultado-global");
 
     const equipos = {
       "ATM": { nombre: "Atleti", abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atlmadrid.png" },
@@ -72,6 +90,7 @@
 
     function actualizarMarcador() {
       res.textContent = `${marcador1} ‎ ‎ ‎ ‎ ‎ ‎ ${marcador2}`;
+      actualizarGlobal();
     }
 
     function sumar(equipo) {
@@ -94,9 +113,47 @@
       cron.textContent = `${min}:${seg}`;
     }
 
+    // --- LÓGICA DE TIEMPO EXTRA MODIFICADA ---
+
     function actualizarTemporizadorExtra() {
-      document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+      extraDiv.textContent = "+" + tiempoExtra;
     }
+
+    function anadirTiempo(min) {
+      tiempoExtra += min;
+      actualizarTemporizadorExtra();
+      // Solo mostramos el cuadro azul (display block) no movemos nada mas
+      extraDiv.style.display = "block";
+    }
+
+    // --- LÓGICA DE GLOBAL (AGGREGATE) NUEVA ---
+
+    function fijarIda() {
+      ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
+      ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
+      actualizarGlobal(); // Refresca el texto inmediatamente
+    }
+
+    // Esta función hace la matemática y actualiza el texto en pantalla
+    function actualizarGlobal() {
+      const total1 = ida1 + marcador1;
+      const total2 = ida2 + marcador2;
+
+      // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
+      globalDiv.textContent = `(${total1}-${total2})`;
+    }
+
+    function toggleGlobal() {
+      // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
+      if (globalDiv.style.display === "flex") {
+        globalDiv.style.display = "none";
+      } else {
+        globalDiv.style.display = "flex";
+        actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+      }
+    }
+
+    // --- CONTROL DEL TIEMPO ---
 
     function iniciar() {
       if (intervalo) clearInterval(intervalo);
@@ -115,16 +172,9 @@
       tiempo = 0;
       tiempoExtra = 0;
       actualizarTiempo();
-      actualizarTemporizadorExtra();
-      document.getElementById("temporizador-extra").style.display = "none";
-      document.querySelector(".cronometro").style.left = "80%";
-    }
 
-    function anadirTiempo(min) {
-      tiempoExtra += min;
-      actualizarTemporizadorExtra();
-      document.getElementById("temporizador-extra").style.display = "block";
-      document.querySelector(".cronometro").style.left = "78%";
+      // Ocultar el extra al reiniciar
+      extraDiv.style.display = "none";
     }
 
     // Generar botones de escudos

@@ -88,17 +88,6 @@
      font-weight: bold;
  }
 
- .temporizador-extra {
-     position: absolute;
-     bottom: 110px;
-     left: 40%;
-     transform: translateX(-50%);
-     color: white;
-     font-size: 30px;
-     justify-self: start;
-     display: none;
- }
-
  .equipos {
      display: flex;
      justify-content: center;
@@ -144,4 +133,44 @@
  h2 {
      margin-top: 20px;
      color: white;
+ }
+
+ .temporizador-extra {
+     position: absolute;
+     top: 72%;
+     /* Lo empuja justo debajo del marcador */
+     left: 38%;
+     /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+     background-color: #2B2B2B;
+     /* Azul igual que el banner */
+     color: #FFFFFF;
+     padding: 7px 66px;
+     font-weight: bold;
+     font-size: 35px;
+     z-index: 10;
+     display: none;
+     /* Oculto por defecto */
+ }
+
+ /* ESTILO PARA EL GLOBAL (Rectángulo blanco a la derecha) */
+ .resultado-global {
+     position: absolute;
+     top: 36%;
+     left: 95%;
+     /* Lo empuja totalmente a la derecha del marcador */
+     height: 25%;
+     /* Misma altura que el marcador */
+     background-color: #972726;
+     color: white;
+     /* Color oscuro para contraste */
+     display: flex;
+     align-items: center;
+     padding: 0 10px;
+     font-weight: bold;
+     font-size: 60px;
+     white-space: nowrap;
+     /* Evita que el texto salte de línea */
+     display: none;
+     /* Oculto por defecto */
+     /* Separador sutil */
  }
