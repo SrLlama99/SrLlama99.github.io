@@ -10,6 +10,13 @@
 
 <body>
 
+    <div id="animacion-gol" class="overlay-gol">
+        <div class="contenido-gol">
+            <span class="texto-gol">GOOOOOOOL</span>
+            <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+        </div>
+    </div>
+
     <div class="marcador">
         <div id="barra1" class="barra-equipo"></div>
         <div id="barra2" class="barra-equipo"></div>
@@ -93,24 +100,49 @@
         const extraDiv = document.getElementById("temporizador-extra"); // Referencia nueva
         const globalDiv = document.getElementById("resultado-global");
 
-    function actualizarMarcador() {
-        res.textContent = `${marcador1} - ${marcador2}`;
-        
-        // 2. IMPORTANTE: Cada vez que cambia el marcador, actualizamos el global
-        actualizarGlobal();
-    }
+        function actualizarMarcador() {
+            res.textContent = `${marcador1} - ${marcador2}`;
 
-    function sumar(equipo) {
-        if (equipo === 1) marcador1++;
-        else marcador2++;
-        actualizarMarcador();
-    }
+            // 2. IMPORTANTE: Cada vez que cambia el marcador, actualizamos el global
+            actualizarGlobal();
+        }
 
-    function restar(equipo) {
-        if (equipo === 1 && marcador1 > 0) marcador1--;
-        else if (equipo === 2 && marcador2 > 0) marcador2--;
-        actualizarMarcador();
-    }
+        function sumar(equipoNum) {
+            let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
+
+            // Buscar el escudo correspondiente en el array de equipos
+            let datosEquipo = equipos.find(e => e.abv === abvEquipo);
+
+            if (equipoNum === 1) marcador1++;
+            else marcador2++;
+
+            actualizarMarcador();
+            lanzarAnimacionGol(datosEquipo ? datosEquipo.escudo : "");
+        }
+
+        function lanzarAnimacionGol(urlEscudo) {
+            const overlay = document.getElementById("animacion-gol");
+            const imgEscudo = document.getElementById("escudo-gol");
+
+            // Configurar escudo
+            imgEscudo.src = urlEscudo;
+
+            // Reiniciar animación (truco para poder lanzarla varias veces)
+            overlay.classList.remove("animar-gol");
+            void overlay.offsetWidth; // Forzar reflujo de la página
+            overlay.classList.add("animar-gol");
+
+            // Limpiar la clase al terminar para que pueda volver a usarse
+            setTimeout(() => {
+                overlay.classList.remove("animar-gol");
+            }, 3000);
+        }
+
+        function restar(equipo) {
+            if (equipo === 1 && marcador1 > 0) marcador1--;
+            else if (equipo === 2 && marcador2 > 0) marcador2--;
+            actualizarMarcador();
+        }
 
         function actualizarTiempo() {
             let min = Math.floor(tiempo / 60);
@@ -137,29 +169,29 @@
         // --- LÓGICA DE GLOBAL (AGGREGATE) NUEVA ---
 
         function fijarIda() {
-        ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
-        ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
-        actualizarGlobal(); // Refresca el texto inmediatamente
-    }
-
-    // Esta función hace la matemática y actualiza el texto en pantalla
-    function actualizarGlobal() {
-        const total1 = ida1 + marcador1;
-        const total2 = ida2 + marcador2;
-        
-        // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
-        globalDiv.textContent = `(${total1}-${total2})`;
-    }
-
-    function toggleGlobal() {
-        // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
-        if (globalDiv.style.display === "flex") {
-            globalDiv.style.display = "none";
-        } else {
-            globalDiv.style.display = "flex";
-            actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+            ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
+            ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
+            actualizarGlobal(); // Refresca el texto inmediatamente
         }
-    }
+
+        // Esta función hace la matemática y actualiza el texto en pantalla
+        function actualizarGlobal() {
+            const total1 = ida1 + marcador1;
+            const total2 = ida2 + marcador2;
+
+            // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
+            globalDiv.textContent = `(${total1}-${total2})`;
+        }
+
+        function toggleGlobal() {
+            // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
+            if (globalDiv.style.display === "flex") {
+                globalDiv.style.display = "none";
+            } else {
+                globalDiv.style.display = "flex";
+                actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+            }
+        }
 
         // --- CONTROL DEL TIEMPO ---
 
