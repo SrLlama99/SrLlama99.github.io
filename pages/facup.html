@@ -23,6 +23,12 @@
         <div class="temporizador-extra" id="temporizador-extra">+0</div>
 
         <div class="resultado-global" id="resultado-global">(0-0)</div>
+        <div id="animacion-gol" class="overlay-gol">
+            <div class="contenido-gol">
+                <span class="texto-gol">GOOOOOOOL</span>
+                <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+            </div>
+        </div>
     </div>
 
     <div>
@@ -66,16 +72,18 @@
         </a>
     </div>
 
+    <audio id="reproductorGol" src=""></audio>
+
     <script>
         const equipos = [
-            { abv: "ARS", color: "#992d22", escudo: "../imgs/escudos/arsenal.png" },
-            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png" },
-            { abv: "CHE", color: "#0039ce", escudo: "../imgs/escudos/chelsea.png" },
-            { abv: "EVE", color: "#0242a1", escudo: "../imgs/escudos/everton.png" },
-            { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png" },
-            { abv: "MUN", color: "#d50032", escudo: "../imgs/escudos/manu.png" },
-            { abv: "MCI", color: "#69acd8", escudo: "../imgs/escudos/manc.png" },
-            { abv: "NEW", color: "#524949", escudo: "../imgs/escudos/newcastle.png" },
+            { abv: "ARS", color: "#992d22", escudo: "../imgs/escudos/arsenal.png", himno: "../audios/general.mp3" },
+            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
+            { abv: "CHE", color: "#0039ce", escudo: "../imgs/escudos/chelsea.png", himno: "../audios/chelsea.mp3" },
+            { abv: "EVE", color: "#0242a1", escudo: "../imgs/escudos/everton.png", himno: "../audios/general.mp3" },
+            { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png", himno: "../audios/liverpool.mp3" },
+            { abv: "MUN", color: "#d50032", escudo: "../imgs/escudos/manu.png", himno: "../audios/general.mp3" },
+            { abv: "MCI", color: "#69acd8", escudo: "../imgs/escudos/manc.png", himno: "../audios/general.mp3" },
+            { abv: "NEW", color: "#524949", escudo: "../imgs/escudos/newcastle.png", himno: "../audios/general.mp3"},
         ];
 
         let marcador1 = 0, marcador2 = 0;
@@ -93,11 +101,61 @@
             actualizarGlobal();
         }
 
-        function sumar(equipo) {
-        if (equipo === 1) marcador1++;
-        else marcador2++;
-        actualizarMarcador();
-    }
+       const reproductor = document.getElementById("reproductorGol");
+
+        function sumar(equipoNum) {
+            // 1. Obtener la abreviatura que está escrita actualmente en el marcador
+            let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
+
+            // 2. Buscar los datos de ese equipo en nuestro array
+            let datosEquipo = equipos.find(e => e.abv === abvEquipo);
+
+            // 3. Sumar el gol
+            if (equipoNum === 1) marcador1++;
+            else marcador2++;
+
+            actualizarMarcador();
+
+            // 4. Lanzar animación y sonido si el equipo existe
+            if (datosEquipo) {
+                lanzarAnimacionGol(datosEquipo.escudo);
+                reproducirHimno(datosEquipo.himno);
+            }
+        }
+
+        function reproducirHimno(rutaAudio) {
+            if (rutaAudio) {
+                reproductor.src = rutaAudio; // Cambiamos la canción a la del equipo que marcó
+                reproductor.volume = 0.7;    // Ajusta el volumen a tu gusto (0.0 a 1.0)
+                reproductor.play();          // ¡Suena el gol!
+            }
+        }
+
+        // Modificamos también la animación para que cuando se limpie, el audio se detenga o baje
+        function lanzarAnimacionGol(urlEscudo) {
+            const overlay = document.getElementById("animacion-gol");
+            const imgEscudo = document.getElementById("escudo-gol");
+
+            imgEscudo.src = urlEscudo;
+
+            overlay.classList.remove("animar-gol");
+            void overlay.offsetWidth;
+            overlay.classList.add("animar-gol");
+
+            setTimeout(() => {
+                overlay.classList.remove("animar-gol");
+                // Opcional: Desvanecer el audio gradualmente al terminar la animación
+                let fadeOut = setInterval(() => {
+                    if (reproductor.volume > 0.1) {
+                        reproductor.volume -= 0.1;
+                    } else {
+                        reproductor.pause();
+                        clearInterval(fadeOut);
+                    }
+                }, 200);
+            }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
+        }
+    
 
     function restar(equipo) {
         if (equipo === 1 && marcador1 > 0) marcador1--;
