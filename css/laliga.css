@@ -1,8 +1,6 @@
 @font-face {
     font-family: 'LaLiga';
     src: url('../fonts/LALIGAText-Bold.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
     font-display: swap;
 }
 
@@ -10,113 +8,256 @@ body {
     font-family: 'LaLiga', Arial, sans-serif;
     text-align: center;
     background-color: #008F39;
+    color: white;
 }
 
 .marcador {
     position: relative;
-    width: 500px;
-    height: 250px;
-    margin: 50px auto;
+    width: 700px;
+    height: 350px;
+    margin: 40px auto;
     background-image: url("../imgs/marcadores/laliga.png");
-    background-size: 155%;
-    background-position: -170px;
-    display: grid;
-    grid-template-columns: 1fr 0.5fr 0.5fr;
-    grid-template-rows: 1fr 1fr;
-    overflow: hidden;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 80%;
+    display: inline-block;
 }
 
-.equipo-img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
-    margin: auto;
+.img-fondo {
+    width: 100%;
     display: block;
 }
 
-#imgEquipo1 {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-#imgEquipo2 {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-.puntaje {
-    font-size: 64px;
-    font-weight: bold;
-    color: black;
-    text-align: center;
-    line-height: 120px;
-}
-
-#puntaje1 {
-    grid-column: 3;
-    grid-row: 1;
-}
-
-#puntaje2 {
-    grid-column: 3;
-    grid-row: 2;
-}
-
-.tiempo-container {
+.capa-datos {
     position: absolute;
-    top: 140px;
-    right: 250px;
-    color: black;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 50px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- BLOQUES DE DATOS (Ajusta estos valores según tu imagen) --- */
+
+.bloque-equipo {
+    position: absolute;
+    width: 50%;   /* Ancho del hueco del nombre */
+    height: 70%;  /* Mitad del marcador */
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
+    left: 35%;    /* Empieza después del logo de la izquierda */
 }
 
-.temporizador {
-    font-size: 50px;
+.eq-pos-1 { top: 3%; }
+.eq-pos-2 { top: 28%; }
+
+.bloque-goles {
+    position: absolute;
+    width: 54%;   /* Ancho del cuadro blanco de goles */
+    height: 50%;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
     font-weight: bold;
+    color: black;
 }
 
-.temporizador-extra {
-    font-size: 30px;
-    grid-column: span 3;
-    justify-self: start;
-    display: none;
+.goles-pos-1 { top: 13%; }
+.goles-pos-2 { top: 38%; }
+
+.bloque-tiempo {
+    position: absolute;
+    width: 87%;   /* Ancho del cuadro blanco del tiempo */
+    height: 50%;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: black;
+    top: 38%;
 }
 
-.control-temporizador {
-    margin-top: 20px;
+/* --- ANIMACIÓN DE ROTACIÓN (Escudo / Nombre) --- */
+
+.abv, .escudo {
+    position: absolute;
+    transition: transform 0.6s ease-in-out, opacity 0.4s;
+}
+
+.abv {
+    font-size: 2rem;
+}
+
+.escudo {
+    width: 70px; /* Tamaño del escudo */
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* Cuando la clase "mostrar-escudo" está activa */
+.mostrar-escudo .abv {
+    opacity: 0;
+    transform: translateY(-30px);
+}
+
+.mostrar-escudo .escudo {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Botones de escudo */
+.escudo-btn {
+    width: 80px;
+    height: 80px;
+    border: 3px solid white;
+    border-radius: 10px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    margin: 6px;
+    display: inline-block;
+    transition: transform 0.2s;
+    background-color: blue;
+}
+
+.escudo-btn:hover {
+    transform: scale(1.1);
+}
+
+.fila-equipos {
+    margin-bottom: 15px;
 }
 
 button {
-    margin: 5px;
-    padding: 8px 15px;
-    font-size: 15px;
-    cursor: pointer;
+    margin: 8px;
+    padding: 8px 14px;
+    font-size: 16px;
+    border-radius: 8px;
     border: none;
-    border-radius: 5px;
-    background-color: #0d43d8;
+    background: blue;
     color: white;
-    transition: 0.2s;
+    cursor: pointer;
 }
 
 button:hover {
-    background-color: rgb(83, 83, 190);
+    background: lightblue;
 }
 
-.escudos {
+.temporizador-extra {
+    position: absolute;
+    top: 44%;
+    /* Lo empuja justo debajo del marcador */
+    left: 91%;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #FF1D1F;
+    /* Azul igual que el banner */
+    color: #FFFFFF;
+    padding: 7px 5px;
+    font-weight: bold;
+    font-size: 35px;
+    z-index: 10;
+    display: none;
+    /* Oculto por defecto */
+}
+
+/* ESTILO PARA EL GLOBAL (Rectángulo blanco a la derecha) */
+.resultado-global {
+    position: absolute;
+    top: 60%;
+    left: 27%;
+    /* Lo empuja totalmente a la derecha del marcador */
+    height: 13%;
+    /* Misma altura que el marcador */
+    background-color: white;
+    color: #FF1D1F;
+    /* Color oscuro para contraste */
     display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 10px 0 25px;
+    align-items: center;
+    width: 13%;
+    padding: 0 29px;
+    font-weight: bold;
+    font-size: 40px;
+    white-space: nowrap;
+    /* Evita que el texto salte de línea */
+    display: none;
+    /* Oculto por defecto */
+    /* Separador sutil */
 }
 
-.escudos button img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
+.overlay-gol {
+    position: absolute;
+    top: 25%;
+    left: -160%;
+    /* Empieza fuera de la pantalla a la izquierda */
+    width: 50%;
+    height: 180px;
+    background: linear-gradient(90deg, #000316 0%, #2B2B2B 50%, #000316 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+    transition: none;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* El contenido interno */
+.contenido-gol {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto-gol {
+    color: white;
+    font-size: 38px;
+    font-weight: 900;
+    text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+/* El escudo semitransparente a la derecha */
+.escudo-fondo {
+    position: absolute;
+    right: 20%;
+    height: 200px;
+    /* Más grande que la barra para que sobresalga */
+    opacity: 0.3;
+    filter: grayscale(20%) brightness(1.2);
+    z-index: 1;
+}
+
+/* Clase que dispara la animación */
+.animar-gol {
+    animation: barridoGol 3s ease-in-out forwards;
+}
+
+@keyframes barridoGol {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 30%;
+    }
+
+    /* Llega al centro rápidamente */
+    80% {
+        left: 30%;
+    }
+
+    /* Se queda quieto un momento */
+    100% {
+        left: 100%;
+    }
+
+    /* Desaparece por la derecha */
 }

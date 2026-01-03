@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,135 +9,258 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="../css/laliga.css">
 </head>
+
 <body>
 
     <div class="marcador" id="marcador">
-        <img src="" alt="Equipo 1" id="imgEquipo1" class="equipo-img">
-        <img src="" alt="Equipo 2" id="imgEquipo2" class="equipo-img">
+        <div class="capa-datos">
 
-        <div id="puntaje1" class="puntaje">0</div>
-        <div id="puntaje2" class="puntaje">0</div>
+            <div class="bloque-equipo eq-pos-1" id="bloque-1">
+                <span id="equipo1-abv" class="abv">EQ1</span>
+                <img id="escudo1" src="" class="escudo">
+            </div>
+            <div class="bloque-goles goles-pos-1" id="goles1">0</div>
 
-        <div class="tiempo-container">
+            <div class="bloque-tiempo" id="cronometro">00:00</div>
             <div class="temporizador-extra" id="temporizador-extra">+0</div>
-            <div class="temporizador" id="temporizador">00:00</div>
+
+            <div class="bloque-equipo eq-pos-2" id="bloque-2">
+                <span id="equipo2-abv" class="abv">EQ2</span>
+                <img id="escudo2" src="" class="escudo">
+            </div>
+            <div class="bloque-goles goles-pos-2" id="goles2">0</div>
+
+            <div id="animacion-gol" class="overlay-gol">
+                <div class="contenido-gol">
+                    <span class="texto-gol">GOOOOOOOL</span>
+                    <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="control-temporizador">
-        <h2>Puntos y tiempo</h2>
-        <button onclick="sumarPunto('puntaje1')">+1</button>
-        <button onclick="restarPunto('puntaje1')">-1</button>
-        <button onclick="iniciarTemporizador()">Iniciar</button>
-        <button onclick="detenerTemporizador()">Detener</button>
-        <button onclick="reiniciarTemporizador()">Reiniciar</button>
-        <button onclick="sumarPunto('puntaje2')">+1</button>
-        <button onclick="restarPunto('puntaje2')">-1</button>
+    <h3>Selecciona Equipo 1</h3>
+    <div class="fila-equipos" id="fila1"></div>
+
+    <h3>Selecciona Equipo 2</h3>
+    <div class="fila-equipos" id="fila2"></div>
+    <br>
+
+
+    <div>
+        <button onclick="sumar(1)">+1 EQ1</button>
+        <button onclick="restar(1)">-1 EQ1</button>
+        <button onclick="sumar(2)">+1 EQ2</button>
+        <button onclick="restar(2)">-1 EQ2</button>
         <br>
-        <h2>Tiempo añadido</h2>
+        <button onclick="iniciar()">Iniciar</button>
+        <button onclick="detener()">Detener</button>
+        <button onclick="reiniciar()">Reiniciar</button>
+        <br>
+        <h3>Tiempo añadido</h3>
         <button onclick="anadirTiempo(1)">+1</button>
         <button onclick="anadirTiempo(2)">+2</button>
         <button onclick="anadirTiempo(3)">+3</button>
         <button onclick="anadirTiempo(4)">+4</button>
         <button onclick="anadirTiempo(5)">+5</button>
+        <br>
+        <a href="../marcadores.html">
+            <button>Volver</button>
+        </a>
     </div>
 
-    <h2>Escudos Equipo 1</h2>
-    <div class="escudos" id="botonesEquipo1"></div>
-
-    <h2>Escudos Equipo 2</h2>
-    <div class="escudos" id="botonesEquipo2"></div>
-    <br>
-    <a href="../marcadores.html">
-        <button>Volver</button>
-    </a>
+    <audio id="reproductorGol" src=""></audio>
 
     <script>
-        const equipos = [
-            { nombre: "Real Madrid", src: "../imgs/escudos/madrid.png" },
-            { nombre: "Villarreal", src: "../imgs/escudos/villarreal.png" },
-            { nombre: "Barcelona", src: "../imgs/escudos/barcelona.png" },
-            { nombre: "Atléti", src: "../imgs/escudos/atlmadrid.png" },
-            { nombre: "Athletic Club", src: "../imgs/escudos/athletic.png" },
-            { nombre: "Betis", src: "../imgs/escudos/betis.png" },
-            { nombre: "Real Sociedad", src: "../imgs/escudos/realsociedad.png" },
-            { nombre: "Málaga", src: "../imgs/escudos/malaga.png" }
-        ];
-
-        function crearBotonesEscudos(contenedorId, imgId) {
-            const contenedor = document.getElementById(contenedorId);
-            equipos.forEach(eq => {
-                const btn = document.createElement("button");
-                btn.innerHTML = `<img src="${eq.src}" alt="${eq.nombre}" title="${eq.nombre}">`;
-                btn.onclick = () => document.getElementById(imgId).src = eq.src;
-                contenedor.appendChild(btn);
-            });
-        }
-
-        crearBotonesEscudos("botonesEquipo1", "imgEquipo1");
-        crearBotonesEscudos("botonesEquipo2", "imgEquipo2");
-
-        // ==== TEMPORIZADOR ====
-        let intervalo;
-        let tiempoRestante = 0;
+        let marcador1 = 0, marcador2 = 0;
+        let ida1 = 0, ida2 = 0;
+        let tiempo = 0, intervalo;
         let tiempoExtra = 0;
 
-        function actualizarTemporizador() {
-            let minutos = Math.floor(tiempoRestante / 60);
-            let segundos = tiempoRestante % 60;
-            minutos = minutos < 10 ? "0" + minutos : minutos;
-            segundos = segundos < 10 ? "0" + segundos : segundos;
-            document.getElementById("temporizador").textContent = minutos + ":" + segundos;
+        const res = document.getElementById("resultado");
+        const cron = document.getElementById("cronometro");
+        const extraDiv = document.getElementById("temporizador-extra"); // Referencia nueva
+
+        const equipos = {
+            "ATM": { nombre: "Atleti", abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atlmadrid.png", himno: "../audios/atleti.mp3" },
+            "MCF": { nombre: "Málaga", abv: "MCF", color: "#3498db", escudo: "../imgs/escudos/malaga.png", himno: "../audios/general.mp3" },
+            "BET": { nombre: "Betis", abv: "BET", color: "#03da18", escudo: "../imgs/escudos/betis.png", himno: "../audios/betis.mp3" },
+            "VIL": { nombre: "Villarreal", abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villarreal.png", himno: "../audios/villarreal.mp3" },
+            "ATH": { nombre: "Athletic", abv: "ATH", color: "#ff4040", escudo: "../imgs/escudos/athletic.png", himno: "../audios/athletic.mp3" },
+            "RSO": { nombre: "R. Sociedad", abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/realsociedad.png", himno: "../audios/real.mp3" },
+            "FCB": { nombre: "Barça", abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barcelona.png", himno: "../audios/barça.mp3" },
+            "RMA": { nombre: "R. Madrid", abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/madrid.png", himno: "../audios/madrid.mp3" }
+        };
+
+        function actualizarMarcador() {
+            res.textContent = `${marcador1} ‎ ‎ ‎ ‎ ‎ ‎ ${marcador2}`;
+            actualizarGlobal();
         }
+
+        const reproductor = document.getElementById("reproductorGol");
+
+        function sumar(equipoNum) {
+            // Obtenemos la abreviatura (ej: "ATM")
+            let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
+
+            // CORRECCIÓN: Acceso directo al objeto equipos usando la clave
+            let datosEquipo = equipos[abvEquipo];
+
+            if (equipoNum === 1) marcador1++;
+            else marcador2++;
+
+            actualizarMarcador();
+
+            if (datosEquipo) {
+                lanzarAnimacionGol(datosEquipo.escudo);
+                // Solo suena si hemos definido el himno
+                if (datosEquipo.himno) {
+                    reproducirHimno(datosEquipo.himno);
+                }
+            }
+        }
+
+        function reproducirHimno(rutaAudio) {
+            if (rutaAudio) {
+                reproductor.src = rutaAudio; // Cambiamos la canción a la del equipo que marcó
+                reproductor.volume = 0.7;    // Ajusta el volumen a tu gusto (0.0 a 1.0)
+                reproductor.play();          // ¡Suena el gol!
+            }
+        }
+
+        // Modificamos también la animación para que cuando se limpie, el audio se detenga o baje
+        function lanzarAnimacionGol(urlEscudo) {
+            const overlay = document.getElementById("animacion-gol");
+            const imgEscudo = document.getElementById("escudo-gol");
+
+            imgEscudo.src = urlEscudo;
+
+            overlay.classList.remove("animar-gol");
+            void overlay.offsetWidth;
+            overlay.classList.add("animar-gol");
+
+            setTimeout(() => {
+                overlay.classList.remove("animar-gol");
+                // Opcional: Desvanecer el audio gradualmente al terminar la animación
+                let fadeOut = setInterval(() => {
+                    if (reproductor.volume > 0.1) {
+                        reproductor.volume -= 0.1;
+                    } else {
+                        reproductor.pause();
+                        clearInterval(fadeOut);
+                    }
+                }, 200);
+            }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
+        }
+
+        function restar(equipo) {
+            if (equipo === 1 && marcador1 > 0) marcador1--;
+            else if (equipo === 2 && marcador2 > 0) marcador2--;
+            actualizarMarcador();
+        }
+
+        function actualizarTiempo() {
+            let min = Math.floor(tiempo / 60);
+            let seg = tiempo % 60;
+            if (seg < 10) seg = "0" + seg;
+            if (min < 10) min = "0" + min;
+            cron.textContent = `${min}:${seg}`;
+        }
+
+        // --- LÓGICA DE TIEMPO EXTRA MODIFICADA ---
 
         function actualizarTemporizadorExtra() {
-            document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+            extraDiv.textContent = "+" + tiempoExtra;
         }
 
-        function iniciarTemporizador() {
+        function anadirTiempo(min) {
+            tiempoExtra += min;
+            actualizarTemporizadorExtra();
+            // Solo mostramos el cuadro azul (display block) no movemos nada mas
+            extraDiv.style.display = "block";
+        }
+
+        // --- CONTROL DEL TIEMPO ---
+
+        function iniciar() {
             if (intervalo) clearInterval(intervalo);
             intervalo = setInterval(() => {
-                tiempoRestante++;
-                actualizarTemporizador();
+                tiempo++;
+                actualizarTiempo();
             }, 1000);
         }
 
-        function detenerTemporizador() {
+        function detener() {
             clearInterval(intervalo);
         }
 
-        function reiniciarTemporizador() {
-            detenerTemporizador();
-            tiempoRestante = 0;
+        function reiniciar() {
+            clearInterval(intervalo);
+            tiempo = 0;
             tiempoExtra = 0;
-            actualizarTemporizador();
-            actualizarTemporizadorExtra();
-            document.getElementById("temporizador-extra").style.display = "none";
-            document.querySelector(".tiempo-container").style.top = "140px";
+            actualizarTiempo();
+
+            // Ocultar el extra al reiniciar
+            extraDiv.style.display = "none";
         }
 
-        function sumarPunto(id) {
-            let puntaje = document.getElementById(id);
-            puntaje.textContent = parseInt(puntaje.textContent) + 1;
+        // Generar botones de escudos
+        const fila1 = document.getElementById("fila1");
+        const fila2 = document.getElementById("fila2");
+
+        Object.keys(equipos).forEach(clave => {
+            const eq = equipos[clave];
+
+            const btn1 = document.createElement("div");
+            btn1.classList.add("escudo-btn");
+            btn1.style.backgroundImage = `url('${eq.escudo}')`;
+            btn1.onclick = () => seleccionarEquipo(1, clave);
+            fila1.appendChild(btn1);
+
+            const btn2 = document.createElement("div");
+            btn2.classList.add("escudo-btn");
+            btn2.style.backgroundImage = `url('${eq.escudo}')`;
+            btn2.onclick = () => seleccionarEquipo(2, clave);
+            fila2.appendChild(btn2);
+        });
+
+        function seleccionarEquipo(num, clave) {
+            const eq = equipos[clave];
+            document.getElementById(`equipo${num}-abv`).textContent = eq.abv;
+            document.getElementById(`barra${num}`).style.backgroundColor = eq.color;
         }
 
-        function restarPunto(id) {
-            let puntaje = document.getElementById(id);
-            let valor = parseInt(puntaje.textContent);
-            if (valor > 0) puntaje.textContent = valor - 1;
+        // 1. Función para que el marcador se actualice correctamente
+        function actualizarMarcador() {
+            document.getElementById("goles1").textContent = marcador1;
+            document.getElementById("goles2").textContent = marcador2;
         }
 
-        function anadirTiempo(minutos) {
-            tiempoExtra += minutos;
-            actualizarTemporizadorExtra();
-            document.getElementById("temporizador-extra").style.display = "block";
-            document.querySelector(".tiempo-container").style.top = "120px";
+        // 2. Lógica para rotar escudos cada 5 segundos
+        function rotarInfo() {
+            const b1 = document.getElementById("bloque-1");
+            const b2 = document.getElementById("bloque-2");
+
+            setInterval(() => {
+                b1.classList.toggle("mostrar-escudo");
+                b2.classList.toggle("mostrar-escudo");
+            }, 5000); // 5000ms = 5 segundos
         }
 
-        actualizarTemporizador();
-        actualizarTemporizadorExtra();
+        // Iniciar la rotación al cargar
+        rotarInfo();
+
+        // 3. Modifica tu función seleccionarEquipo para que cambie la imagen
+        function seleccionarEquipo(num, clave) {
+            const eq = equipos[clave];
+            document.getElementById(`equipo${num}-abv`).textContent = eq.abv;
+            document.getElementById(`escudo${num}`).src = eq.escudo;
+        }
+
+        actualizarMarcador();
+        actualizarTiempo();
     </script>
 </body>
+
 </html>
-
-
