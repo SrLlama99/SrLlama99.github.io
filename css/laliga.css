@@ -151,43 +151,20 @@ button:hover {
 
 .temporizador-extra {
     position: absolute;
-    top: 44%;
+    top: 75%;
     /* Lo empuja justo debajo del marcador */
-    left: 91%;
+    left: 34%;
     /* AJUSTA ESTE VALOR para alinearlo con el reloj */
     background-color: #FF1D1F;
     /* Azul igual que el banner */
     color: #FFFFFF;
-    padding: 7px 5px;
+    padding: 7px 48px;
     font-weight: bold;
     font-size: 35px;
     z-index: 10;
     display: none;
     /* Oculto por defecto */
-}
-
-/* ESTILO PARA EL GLOBAL (Rectángulo blanco a la derecha) */
-.resultado-global {
-    position: absolute;
-    top: 60%;
-    left: 27%;
-    /* Lo empuja totalmente a la derecha del marcador */
-    height: 13%;
-    /* Misma altura que el marcador */
-    background-color: white;
-    color: #FF1D1F;
-    /* Color oscuro para contraste */
-    display: flex;
-    align-items: center;
-    width: 13%;
-    padding: 0 29px;
-    font-weight: bold;
-    font-size: 40px;
-    white-space: nowrap;
-    /* Evita que el texto salte de línea */
-    display: none;
-    /* Oculto por defecto */
-    /* Separador sutil */
+    border: 3px solid #000316;
 }
 
 .overlay-gol {
