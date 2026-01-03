@@ -85,16 +85,6 @@ body {
     font-weight: bold;
 }
 
-.temporizador-extra {
-    position: absolute;
-    bottom: 155px;
-    left: 94%;
-    transform: translateX(-50%);
-    color: white;
-    font-size: 30px;
-    display: none;
-}
-
 .equipos {
     display: flex;
     justify-content: center;
@@ -140,4 +130,76 @@ button:hover {
 h2 {
     margin-top: 20px;
     color: white;
+}
+
+.temporizador-extra {
+    position: absolute;
+    top: 43.5%;
+    /* Lo empuja justo debajo del marcador */
+    left: 97.5%;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #0147FF;
+    /* Azul igual que el banner */
+    color: #FFFFFF;
+    padding: 3px 8px;
+    font-weight: bold;
+    font-size: 35px;
+    z-index: 10;
+    display: none;
+    /* Oculto por defecto */
+}
+
+.overlay-gol {
+    position: absolute;
+    top: 40%;
+    left: -160%; /* Empieza fuera de la pantalla a la izquierda */
+    width: 105%;
+    height: 70px;
+    background: linear-gradient(90deg, #0A297B 0%, #0147FF 50%, #0A297B 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+    transition: none;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+
+/* El contenido interno */
+.contenido-gol {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto-gol {
+    color: white;
+    font-size: 38px;
+    font-weight: 900;
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+/* El escudo semitransparente a la derecha */
+.escudo-fondo {
+    position: absolute;
+    right: 30%;
+    height: 100px; /* Más grande que la barra para que sobresalga */
+    opacity: 0.3;
+    filter: grayscale(20%) brightness(1.2);
+    z-index: 1;
+}
+
+/* Clase que dispara la animación */
+.animar-gol {
+    animation: barridoGol 3s ease-in-out forwards;
+}
+
+@keyframes barridoGol {
+    0% { left: -100%; }
+    20% { left: 0; }  /* Llega al centro rápidamente */
+    80% { left: 0; }  /* Se queda quieto un momento */
+    100% { left: 100%; } /* Desaparece por la derecha */
 }

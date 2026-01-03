@@ -21,6 +21,13 @@
 
     <div class="cronometro" id="cronometro">00:00</div>
     <div class="temporizador-extra" id="temporizador-extra">+0</div>
+
+    <div id="animacion-gol" class="overlay-gol">
+      <div class="contenido-gol">
+        <span class="texto-gol">GOOOOOOOL</span>
+        <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+      </div>
+    </div>
   </div>
 
   <h2>Equipo 1</h2>
@@ -50,34 +57,87 @@
     <button>Volver</button>
   </a>
 
+  <audio id="reproductorGol" src=""></audio>
+
   <script>
     // Lista de equipos con escudos
     const equipos = [
-      { abv: "JUV", color: "#d9d9d9", escudo: "../imgs/escudos/juventus.png" },
-      { abv: "FIO", color: "#693de2", escudo: "../imgs/escudos/fiorentina.png" },
-      { abv: "NAP", color: "#009dff", escudo: "../imgs/escudos/napoli.png" },
-      { abv: "INT", color: "#0014cc", escudo: "../imgs/escudos/inter.png" },
-      { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png" },
-      { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png" },
-      { abv: "LAZ", color: "#00d9fc", escudo: "../imgs/escudos/lazio.png" },
-      { abv: "PAL", color: "#ee8eb0", escudo: "../imgs/escudos/palermo.png" },
+      { abv: "JUV", color: "#d9d9d9", escudo: "../imgs/escudos/juventus.png", himno: "../audios/juve.mp3" },
+      { abv: "FIO", color: "#693de2", escudo: "../imgs/escudos/fiorentina.png", himno: "../audios/fiore.mp3" },
+      { abv: "NAP", color: "#009dff", escudo: "../imgs/escudos/napoli.png", himno: "../audios/napoli.mp3" },
+      { abv: "INT", color: "#0014cc", escudo: "../imgs/escudos/inter.png", himno: "../audios/inter.mp3" },
+      { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
+      { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png", himno: "../audios/general.mp3" },
+      { abv: "LAZ", color: "#00d9fc", escudo: "../imgs/escudos/lazio.png", himno: "../audios/lazio.mp3" },
+      { abv: "PAL", color: "#ee8eb0", escudo: "../imgs/escudos/palermo.png", himno: "../audios/general.mp3" },
     ];
-
     let marcador1 = 0, marcador2 = 0;
+    let ida1 = 0, ida2 = 0;
     let tiempo = 0, intervalo;
     let tiempoExtra = 0;
 
     const res = document.getElementById("resultado");
     const cron = document.getElementById("cronometro");
+    const extraDiv = document.getElementById("temporizador-extra"); // Referencia nueva
+    const globalDiv = document.getElementById("resultado-global");
 
     function actualizarMarcador() {
       res.textContent = `${marcador1} - ${marcador2}`;
     }
 
-    function sumar(equipo) {
-      if (equipo === 1) marcador1++;
+    const reproductor = document.getElementById("reproductorGol");
+
+    function sumar(equipoNum) {
+      // 1. Obtener la abreviatura que está escrita actualmente en el marcador
+      let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
+
+      // 2. Buscar los datos de ese equipo en nuestro array
+      let datosEquipo = equipos.find(e => e.abv === abvEquipo);
+
+      // 3. Sumar el gol
+      if (equipoNum === 1) marcador1++;
       else marcador2++;
+
       actualizarMarcador();
+
+      // 4. Lanzar animación y sonido si el equipo existe
+      if (datosEquipo) {
+        lanzarAnimacionGol(datosEquipo.escudo);
+        reproducirHimno(datosEquipo.himno);
+      }
+    }
+
+    function reproducirHimno(rutaAudio) {
+      if (rutaAudio) {
+        reproductor.src = rutaAudio; // Cambiamos la canción a la del equipo que marcó
+        reproductor.volume = 0.7;    // Ajusta el volumen a tu gusto (0.0 a 1.0)
+        reproductor.play();          // ¡Suena el gol!
+      }
+    }
+
+    // Modificamos también la animación para que cuando se limpie, el audio se detenga o baje
+    function lanzarAnimacionGol(urlEscudo) {
+      const overlay = document.getElementById("animacion-gol");
+      const imgEscudo = document.getElementById("escudo-gol");
+
+      imgEscudo.src = urlEscudo;
+
+      overlay.classList.remove("animar-gol");
+      void overlay.offsetWidth;
+      overlay.classList.add("animar-gol");
+
+      setTimeout(() => {
+        overlay.classList.remove("animar-gol");
+        // Opcional: Desvanecer el audio gradualmente al terminar la animación
+        let fadeOut = setInterval(() => {
+          if (reproductor.volume > 0.1) {
+            reproductor.volume -= 0.1;
+          } else {
+            reproductor.pause();
+            clearInterval(fadeOut);
+          }
+        }, 200);
+      }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
     }
 
     function restar(equipo) {
@@ -94,9 +154,19 @@
       cron.textContent = `${min}:${seg}`;
     }
 
+    // --- LÓGICA DE TIEMPO EXTRA MODIFICADA ---
+
     function actualizarTemporizadorExtra() {
-      document.getElementById("temporizador-extra").textContent = "+" + tiempoExtra;
+      extraDiv.textContent = "+" + tiempoExtra;
     }
+
+    function anadirTiempo(min) {
+      tiempoExtra += min;
+      actualizarTemporizadorExtra();
+      // Solo mostramos el cuadro azul (display block) no movemos nada mas
+      extraDiv.style.display = "block";
+    }
+    // --- CONTROL DEL TIEMPO ---
 
     function iniciar() {
       if (intervalo) clearInterval(intervalo);
@@ -115,25 +185,19 @@
       tiempo = 0;
       tiempoExtra = 0;
       actualizarTiempo();
-      actualizarTemporizadorExtra();
-      document.getElementById("temporizador-extra").style.display = "none";
-      document.querySelector(".cronometro").style.left = "86%";
+
+      // Ocultar el extra al reiniciar
+      extraDiv.style.display = "none";
     }
 
-    function anadirTiempo(min) {
-      tiempoExtra += min;
-      actualizarTemporizadorExtra();
-      document.getElementById("temporizador-extra").style.display = "block";
-      document.querySelector(".cronometro").style.left = "83%";
-    }
-
-    // Crear botones con escudos
+    // ... (Tu función crearBotonesEquipos sigue igual) ...
     function crearBotonesEquipos(containerId, equipoNum) {
       const cont = document.getElementById(containerId);
       equipos.forEach(eq => {
         const btn = document.createElement("button");
         btn.className = "boton-escudo";
-        btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}">`;
+        // Nota: He quitado la imagen para el ejemplo si no carga, pero dejalo como lo tenias
+        btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="20">`;
         btn.onclick = () => {
           document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
           document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
