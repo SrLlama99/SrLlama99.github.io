@@ -23,6 +23,12 @@
         <div class="temporizador-extra" id="temporizador-extra">+0</div>
 
         <div class="resultado-global" id="resultado-global">(0-0)</div>
+        <div id="animacion-gol" class="overlay-gol">
+        <div class="contenido-gol">
+            <span class="texto-gol">GOOOOOOOL</span>
+            <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+        </div>
+    </div>
     </div>
 
     <div>
@@ -67,18 +73,20 @@
         </a>
     </div>
 
+    <audio id="reproductorGol" src=""></audio>
+
     <script>
         const equipos = [
-            { abv: "EVE", color: "#0242a1", escudo: "../imgs/escudos/everton.png" },
-            { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png" },
-            { abv: "MCI", color: "#69acd8", escudo: "../imgs/escudos/manc.png" },
-            { abv: "BET", color: "#03da18", escudo: "../imgs/escudos/rbb.png" },
-            { abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atleti.png" },
-            { abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villa.png" },
-            { abv: "JUV", color: "#d9d9d9", escudo: "../imgs/escudos/juventus.png" },
-            { abv: "FIO", color: "#693de2", escudo: "../imgs/escudos/fiorentina.png" },
-            { abv: "NAP", color: "#009dff", escudo: "../imgs/escudos/napoli.png" },
-            { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png" },
+            { abv: "EVE", color: "#0242a1", escudo: "../imgs/escudos/everton.png", himno: "../audios/general.mp3" },
+            { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png", himno: "../audios/liverpool.mp3" },
+            { abv: "MCI", color: "#69acd8", escudo: "../imgs/escudos/manc.png", himno: "../audios/general.mp3" },
+            { abv: "BET", color: "#03da18", escudo: "../imgs/escudos/rbb.png", himno: "../audios/betis.mp3" },
+            { abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atleti.png", himno: "../audios/atleti.mp3" },
+            { abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villa.png", himno: "../audios/villarreal.mp3" },
+            { abv: "JUV", color: "#d9d9d9", escudo: "../imgs/escudos/juventus.png", himno: "../audios/juve.mp3" },
+            { abv: "FIO", color: "#693de2", escudo: "../imgs/escudos/fiorentina.png", himno: "../audios/fiore.mp3" },
+            { abv: "NAP", color: "#009dff", escudo: "../imgs/escudos/napoli.png", himno: "../audios/napoli.mp3" },
+            { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png", himno: "../audios/general.mp3" },
         ];
 
         let marcador1 = 0, marcador2 = 0;
@@ -96,17 +104,67 @@
             actualizarGlobal();
         }
 
-        function sumar(equipo) {
-        if (equipo === 1) marcador1++;
-        else marcador2++;
-        actualizarMarcador();
-    }
+        // Variable global para controlar el audio
+        const reproductor = document.getElementById("reproductorGol");
 
-    function restar(equipo) {
-        if (equipo === 1 && marcador1 > 0) marcador1--;
-        else if (equipo === 2 && marcador2 > 0) marcador2--;
-        actualizarMarcador();
-    }
+        function sumar(equipoNum) {
+            // 1. Obtener la abreviatura que está escrita actualmente en el marcador
+            let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
+
+            // 2. Buscar los datos de ese equipo en nuestro array
+            let datosEquipo = equipos.find(e => e.abv === abvEquipo);
+
+            // 3. Sumar el gol
+            if (equipoNum === 1) marcador1++;
+            else marcador2++;
+
+            actualizarMarcador();
+
+            // 4. Lanzar animación y sonido si el equipo existe
+            if (datosEquipo) {
+                lanzarAnimacionGol(datosEquipo.escudo);
+                reproducirHimno(datosEquipo.himno);
+            }
+        }
+
+        function reproducirHimno(rutaAudio) {
+            if (rutaAudio) {
+                reproductor.src = rutaAudio; // Cambiamos la canción a la del equipo que marcó
+                reproductor.volume = 0.7;    // Ajusta el volumen a tu gusto (0.0 a 1.0)
+                reproductor.play();          // ¡Suena el gol!
+            }
+        }
+
+        // Modificamos también la animación para que cuando se limpie, el audio se detenga o baje
+        function lanzarAnimacionGol(urlEscudo) {
+            const overlay = document.getElementById("animacion-gol");
+            const imgEscudo = document.getElementById("escudo-gol");
+
+            imgEscudo.src = urlEscudo;
+
+            overlay.classList.remove("animar-gol");
+            void overlay.offsetWidth;
+            overlay.classList.add("animar-gol");
+
+            setTimeout(() => {
+                overlay.classList.remove("animar-gol");
+                // Opcional: Desvanecer el audio gradualmente al terminar la animación
+                let fadeOut = setInterval(() => {
+                    if (reproductor.volume > 0.1) {
+                        reproductor.volume -= 0.1;
+                    } else {
+                        reproductor.pause();
+                        clearInterval(fadeOut);
+                    }
+                }, 200);
+            }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
+        }
+
+        function restar(equipo) {
+            if (equipo === 1 && marcador1 > 0) marcador1--;
+            else if (equipo === 2 && marcador2 > 0) marcador2--;
+            actualizarMarcador();
+        }
 
         function actualizarTiempo() {
             let min = Math.floor(tiempo / 60);
@@ -125,35 +183,37 @@
         function anadirTiempo(min) {
             tiempoExtra += min;
             actualizarTemporizadorExtra();
+            // Solo mostramos el cuadro azul (display block) no movemos nada mas
             extraDiv.classList.add("activo");
+
         }
 
         // --- LÓGICA DE GLOBAL (AGGREGATE) NUEVA ---
 
         function fijarIda() {
-        ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
-        ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
-        actualizarGlobal(); // Refresca el texto inmediatamente
-    }
-
-    // Esta función hace la matemática y actualiza el texto en pantalla
-    function actualizarGlobal() {
-        const total1 = ida1 + marcador1;
-        const total2 = ida2 + marcador2;
-        
-        // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
-        globalDiv.textContent = `(${total1}-${total2})`;
-    }
-
-    function toggleGlobal() {
-        // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
-        if (globalDiv.style.display === "flex") {
-            globalDiv.style.display = "none";
-        } else {
-            globalDiv.style.display = "flex";
-            actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+            ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
+            ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
+            actualizarGlobal(); // Refresca el texto inmediatamente
         }
-    }
+
+        // Esta función hace la matemática y actualiza el texto en pantalla
+        function actualizarGlobal() {
+            const total1 = ida1 + marcador1;
+            const total2 = ida2 + marcador2;
+
+            // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
+            globalDiv.textContent = `(${total1}-${total2})`;
+        }
+
+        function toggleGlobal() {
+            // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
+            if (globalDiv.style.display === "flex") {
+                globalDiv.style.display = "none";
+            } else {
+                globalDiv.style.display = "flex";
+                actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+            }
+        }
 
         // --- CONTROL DEL TIEMPO ---
 

@@ -25,11 +25,11 @@
 
         <div class="resultado-global" id="resultado-global">(0-0)</div>
         <div id="animacion-gol" class="overlay-gol">
-        <div class="contenido-gol">
-            <span class="texto-gol">GOOOOOOOL</span>
-            <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+            <div class="contenido-gol">
+                <span class="texto-gol">GOOOOOOOL</span>
+                <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+            </div>
         </div>
-    </div>
     </div>
 
     <div>
@@ -69,24 +69,26 @@
         <button onclick="anadirTiempo(4)">+4</button>
         <button onclick="anadirTiempo(5)">+5</button>
         <br>
-        <a href="/index.html">
+        <a href="../marcadores.html">
             <button>Volver</button>
         </a>
     </div>
 
+    <audio id="reproductorGol" src=""></audio>
+
     <script>
         // ... (Tu array de equipos y variables de marcador siguen igual) ...
         const equipos = [
-            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png" },
-            { abv: "CHE", color: "#0039ce", escudo: "../imgs/escudos/chelsea.png" },
-            { abv: "NEW", color: "#524949", escudo: "../imgs/escudos/newcastle.png" },
-            { abv: "INT", color: "#0014cc", escudo: "../imgs/escudos/inter.png" },
-            { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png" },
-            { abv: "PAL", color: "#ee8eb0", escudo: "../imgs/escudos/palermo.png" },
-            { abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/realmadrid.png" },
-            { abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barca.png" },
-            { abv: "ATH", color: "#ff4040", escudo: "../imgs/escudos/athletic1.png" },
-            { abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/rso.png" },
+            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
+            { abv: "CHE", color: "#0039ce", escudo: "../imgs/escudos/chelsea.png", himno: "../audios/chelsea.mp3" },
+            { abv: "NEW", color: "#524949", escudo: "../imgs/escudos/newcastle.png", himno: "../audios/general.mp3" },
+            { abv: "INT", color: "#0014cc", escudo: "../imgs/escudos/inter.png", himno: "../audios/inter.mp3" },
+            { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
+            { abv: "PAL", color: "#ee8eb0", escudo: "../imgs/escudos/palermo.png", himno: "../audios/general.mp3" },
+            { abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/realmadrid.png", himno: "../audios/madrid.mp3" },
+            { abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barca.png", himno: "../audios/barça.mp3" },
+            { abv: "ATH", color: "#ff4040", escudo: "../imgs/escudos/athletic1.png", himno: "../audios/athletic.mp3" },
+            { abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/rso.png", himno: "../audios/real.mp3" },
         ];
 
         let marcador1 = 0, marcador2 = 0;
@@ -106,35 +108,60 @@
             actualizarGlobal();
         }
 
+        // Variable global para controlar el audio
+        const reproductor = document.getElementById("reproductorGol");
+
         function sumar(equipoNum) {
+            // 1. Obtener la abreviatura que está escrita actualmente en el marcador
             let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
 
-            // Buscar el escudo correspondiente en el array de equipos
+            // 2. Buscar los datos de ese equipo en nuestro array
             let datosEquipo = equipos.find(e => e.abv === abvEquipo);
 
+            // 3. Sumar el gol
             if (equipoNum === 1) marcador1++;
             else marcador2++;
 
             actualizarMarcador();
-            lanzarAnimacionGol(datosEquipo ? datosEquipo.escudo : "");
+
+            // 4. Lanzar animación y sonido si el equipo existe
+            if (datosEquipo) {
+                lanzarAnimacionGol(datosEquipo.escudo);
+                reproducirHimno(datosEquipo.himno);
+            }
         }
 
+        function reproducirHimno(rutaAudio) {
+            if (rutaAudio) {
+                reproductor.src = rutaAudio; // Cambiamos la canción a la del equipo que marcó
+                reproductor.volume = 0.7;    // Ajusta el volumen a tu gusto (0.0 a 1.0)
+                reproductor.play();          // ¡Suena el gol!
+            }
+        }
+
+        // Modificamos también la animación para que cuando se limpie, el audio se detenga o baje
         function lanzarAnimacionGol(urlEscudo) {
             const overlay = document.getElementById("animacion-gol");
             const imgEscudo = document.getElementById("escudo-gol");
 
-            // Configurar escudo
             imgEscudo.src = urlEscudo;
 
-            // Reiniciar animación (truco para poder lanzarla varias veces)
             overlay.classList.remove("animar-gol");
-            void overlay.offsetWidth; // Forzar reflujo de la página
+            void overlay.offsetWidth;
             overlay.classList.add("animar-gol");
 
-            // Limpiar la clase al terminar para que pueda volver a usarse
             setTimeout(() => {
                 overlay.classList.remove("animar-gol");
-            }, 3000);
+                // Opcional: Desvanecer el audio gradualmente al terminar la animación
+                let fadeOut = setInterval(() => {
+                    if (reproductor.volume > 0.1) {
+                        reproductor.volume -= 0.1;
+                    } else {
+                        reproductor.pause();
+                        clearInterval(fadeOut);
+                    }
+                }, 200);
+            }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
         }
 
         function restar(equipo) {
