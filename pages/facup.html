@@ -76,14 +76,14 @@
 
     <script>
         const equipos = [
-            { abv: "ARS", color: "#992d22", escudo: "../imgs/escudos/arsenal.png", himno: "../audios/general.mp3" },
-            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
+            { abv: "ARS", colores: ["#992d22", "#ffffff"], escudo: "../imgs/escudos/arsenal.png", himno: "../audios/general.mp3" },
+            { abv: "AST", colores: ["#ad1457", "#8186e6"], escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
             { abv: "CHE", color: "#0039ce", escudo: "../imgs/escudos/chelsea.png", himno: "../audios/chelsea.mp3" },
             { abv: "EVE", color: "#0242a1", escudo: "../imgs/escudos/everton.png", himno: "../audios/general.mp3" },
             { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png", himno: "../audios/liverpool.mp3" },
             { abv: "MUN", color: "#d50032", escudo: "../imgs/escudos/manu.png", himno: "../audios/general.mp3" },
             { abv: "MCI", color: "#69acd8", escudo: "../imgs/escudos/manc.png", himno: "../audios/general.mp3" },
-            { abv: "NEW", color: "#524949", escudo: "../imgs/escudos/newcastle.png", himno: "../audios/general.mp3"},
+            { abv: "NEW", colores: ["#524949", "#ffffff"], escudo: "../imgs/escudos/newcastle.png", himno: "../audios/general.mp3" },
         ];
 
         let marcador1 = 0, marcador2 = 0;
@@ -101,7 +101,7 @@
             actualizarGlobal();
         }
 
-       const reproductor = document.getElementById("reproductorGol");
+        const reproductor = document.getElementById("reproductorGol");
 
         function sumar(equipoNum) {
             // 1. Obtener la abreviatura que está escrita actualmente en el marcador
@@ -155,13 +155,13 @@
                 }, 200);
             }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
         }
-    
 
-    function restar(equipo) {
-        if (equipo === 1 && marcador1 > 0) marcador1--;
-        else if (equipo === 2 && marcador2 > 0) marcador2--;
-        actualizarMarcador();
-    }
+
+        function restar(equipo) {
+            if (equipo === 1 && marcador1 > 0) marcador1--;
+            else if (equipo === 2 && marcador2 > 0) marcador2--;
+            actualizarMarcador();
+        }
 
         function actualizarTiempo() {
             let min = Math.floor(tiempo / 60);
@@ -187,29 +187,29 @@
         // --- LÓGICA DE GLOBAL (AGGREGATE) NUEVA ---
 
         function fijarIda() {
-        ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
-        ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
-        actualizarGlobal(); // Refresca el texto inmediatamente
-    }
-
-    // Esta función hace la matemática y actualiza el texto en pantalla
-    function actualizarGlobal() {
-        const total1 = ida1 + marcador1;
-        const total2 = ida2 + marcador2;
-        
-        // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
-        globalDiv.textContent = `(${total1} - ${total2})`;
-    }
-
-    function toggleGlobal() {
-        // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
-        if (globalDiv.style.display === "flex") {
-            globalDiv.style.display = "none";
-        } else {
-            globalDiv.style.display = "flex";
-            actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+            ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
+            ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
+            actualizarGlobal(); // Refresca el texto inmediatamente
         }
-    }
+
+        // Esta función hace la matemática y actualiza el texto en pantalla
+        function actualizarGlobal() {
+            const total1 = ida1 + marcador1;
+            const total2 = ida2 + marcador2;
+
+            // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
+            globalDiv.textContent = `(${total1} - ${total2})`;
+        }
+
+        function toggleGlobal() {
+            // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
+            if (globalDiv.style.display === "flex") {
+                globalDiv.style.display = "none";
+            } else {
+                globalDiv.style.display = "flex";
+                actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
+            }
+        }
 
         // --- CONTROL DEL TIEMPO ---
 
@@ -241,11 +241,23 @@
             equipos.forEach(eq => {
                 const btn = document.createElement("button");
                 btn.className = "boton-escudo";
-                // Nota: He quitado la imagen para el ejemplo si no carga, pero dejalo como lo tenias
-                btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="20">`;
+                btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="40px">`;
+
                 btn.onclick = () => {
                     document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
-                    document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
+
+                    const barra = document.getElementById(`barra${equipoNum}`);
+
+                    // Si el equipo tiene 2 colores definidos
+                    if (eq.colores && eq.colores.length === 2) {
+                        // Creamos un degradado lineal de arriba a abajo (to bottom) 
+                        // con un corte seco al 50%
+                        barra.style.background = `linear-gradient(to bottom, ${eq.colores[0]} 50%, ${eq.colores[1]} 50%)`;
+                    } else {
+                        // Si solo hay un color (por si acaso no actualizas todos)
+                        barra.style.backgroundColor = eq.color;
+                        barra.style.background = eq.color;
+                    }
                 };
                 cont.appendChild(btn);
             });

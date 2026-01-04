@@ -60,13 +60,13 @@
 
   <script>
     const equipos = [
-      { abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atlmadrid.png", himno: "../audios/atleti.mp3" },
-      { abv: "MCF", color: "#3498db", escudo: "../imgs/escudos/malaga.png", himno: "../audios/general.mp3" },
-      { abv: "BET", color: "#03da18", escudo: "../imgs/escudos/betis.png", himno: "../audios/betis.mp3" },
+      { abv: "ATM", colores: ["#e01f1a", "#ffffff"], escudo: "../imgs/escudos/atlmadrid.png", himno: "../audios/atleti.mp3" },
+      { abv: "MCF", colores: ["#3498db","#ffffff"], escudo: "../imgs/escudos/malaga.png", himno: "../audios/general.mp3" },
+      { abv: "BET", colores: ["#03da18","#ffffff"], escudo: "../imgs/escudos/betis.png", himno: "../audios/betis.mp3" },
       { abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villarreal.png", himno: "../audios/villarreal.mp3" },
-      { abv: "ATH", color: "#ff4040", escudo: "../imgs/escudos/athletic.png", himno: "../audios/athletic.mp3" },
-      { abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/realsociedad.png", himno: "../audios/real.mp3" },
-      { abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barcelona.png", himno: "../audios/barça.mp3" },
+      { abv: "ATH", colores: ["#ff4040","#ffffff"], escudo: "../imgs/escudos/athletic.png", himno: "../audios/athletic.mp3" },
+      { abv: "RSO", colores: ["#005ab9","#ffffff"], escudo: "../imgs/escudos/realsociedad.png", himno: "../audios/real.mp3" },
+      { abv: "FCB", colores: ["#8f1515","#1c1f54"], escudo: "../imgs/escudos/barcelona.png", himno: "../audios/barça.mp3" },
       { abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/madrid.png", himno: "../audios/madrid.mp3" },
     ];
 
@@ -195,11 +195,23 @@
       equipos.forEach(eq => {
         const btn = document.createElement("button");
         btn.className = "boton-escudo";
-        // Nota: He quitado la imagen para el ejemplo si no carga, pero dejalo como lo tenias
         btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="40px">`;
+
         btn.onclick = () => {
           document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
-          document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
+
+          const barra = document.getElementById(`barra${equipoNum}`);
+
+          // Si el equipo tiene 2 colores definidos
+          if (eq.colores && eq.colores.length === 2) {
+            // Creamos un degradado lineal de arriba a abajo (to bottom) 
+            // con un corte seco al 50%
+            barra.style.background = `linear-gradient(to bottom, ${eq.colores[0]} 50%, ${eq.colores[1]} 50%)`;
+          } else {
+            // Si solo hay un color (por si acaso no actualizas todos)
+            barra.style.backgroundColor = eq.color;
+            barra.style.background = eq.color;
+          }
         };
         cont.appendChild(btn);
       });

@@ -75,11 +75,11 @@
     <script>
         // Lista de equipos con escudos
         const equipos = [
-            { abv: "JUV", color: "#d9d9d9", escudo: "../imgs/escudos/juventus.png", himno: "../audios/juve.mp3" },
+            { abv: "JUV", colores: ["#d9d9d9","#000000"], escudo: "../imgs/escudos/juventus.png", himno: "../audios/juve.mp3" },
             { abv: "FIO", color: "#693de2", escudo: "../imgs/escudos/fiorentina.png", himno: "../audios/fiore.mp3" },
             { abv: "NAP", color: "#009dff", escudo: "../imgs/escudos/napoli.png", himno: "../audios/napoli.mp3" },
-            { abv: "INT", color: "#0014cc", escudo: "../imgs/escudos/inter.png", himno: "../audios/inter.mp3" },
-            { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
+            { abv: "INT", colores: ["#0014cc","#000000"], escudo: "../imgs/escudos/inter.png", himno: "../audios/inter.mp3" },
+            { abv: "ACM", colores: ["#710b06","#000000"], escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
             { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png", himno: "../audios/general.mp3" },
             { abv: "LAZ", color: "#00d9fc", escudo: "../imgs/escudos/lazio.png", himno: "../audios/lazio.mp3" },
             { abv: "PAL", color: "#ee8eb0", escudo: "../imgs/escudos/palermo.png", himno: "../audios/general.mp3" },
@@ -240,11 +240,23 @@
             equipos.forEach(eq => {
                 const btn = document.createElement("button");
                 btn.className = "boton-escudo";
-                // Nota: He quitado la imagen para el ejemplo si no carga, pero dejalo como lo tenias
-                btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="20">`;
+                btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="40px">`;
+
                 btn.onclick = () => {
                     document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
-                    document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
+
+                    const barra = document.getElementById(`barra${equipoNum}`);
+
+                    // Si el equipo tiene 2 colores definidos
+                    if (eq.colores && eq.colores.length === 2) {
+                        // Creamos un degradado lineal de arriba a abajo (to bottom) 
+                        // con un corte seco al 50%
+                        barra.style.background = `linear-gradient(to bottom, ${eq.colores[0]} 50%, ${eq.colores[1]} 50%)`;
+                    } else {
+                        // Si solo hay un color (por si acaso no actualizas todos)
+                        barra.style.backgroundColor = eq.color;
+                        barra.style.background = eq.color;
+                    }
                 };
                 cont.appendChild(btn);
             });

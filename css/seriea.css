@@ -62,13 +62,13 @@ body {
 .barra-equipo {
     position: absolute;
     top: 152px;
-    width: 15px;
-    height: 49px;
+    width: 17px;
+    height: 48.35px;
     background-color: white;
 }
 
 #barra1 {
-    left: 198px;
+    left: 197px;
 }
 
 #barra2 {

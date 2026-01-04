@@ -9,6 +9,7 @@
 </head>
 
 <body>
+
   <div class="marcador">
     <div id="barra1" class="barra-equipo"></div>
     <div id="barra2" class="barra-equipo"></div>
@@ -16,12 +17,10 @@
     <div id="equipo1-abv" class="equipo-abv">EQ1</div>
     <div id="equipo2-abv" class="equipo-abv">EQ2</div>
 
-    <div class="resultado" id="resultado">0 - 0</div>
+    <div class="resultado" id="resultado">0 ‎ ‎ ‎ ‎ ‎ ‎ 0</div>
 
     <div class="cronometro" id="cronometro">00:00</div>
     <div class="temporizador-extra" id="temporizador-extra">+0</div>
-
-    <div class="resultado-global" id="resultado-global">(0-0)</div>
     <div id="animacion-gol" class="overlay-gol">
       <div class="contenido-gol">
         <span class="texto-gol">GOOOOOOOL</span>
@@ -30,51 +29,47 @@
     </div>
   </div>
 
-  <h3>Selecciona Equipo 1</h3>
-  <div class="fila-equipos" id="fila1"></div>
+  <h2>Equipo 1</h2>
+  <div class="equipos" id="botonesEq1"></div>
 
-  <h3>Selecciona Equipo 2</h3>
-  <div class="fila-equipos" id="fila2"></div>
-  <h2>Configuración Global (Ida)</h2>
-  <div style="margin-bottom: 10px;">
-    <label>Ida Eq1: </label>
-    <input type="number" id="inputIda1" value="0" style="width: 50px;">
+  <h2>Equipo 2</h2>
+  <div class="equipos" id="botonesEq2"></div>
 
-    <label>Ida Eq2: </label>
-    <input type="number" id="inputIda2" value="0" style="width: 50px;">
-
-    <button onclick="fijarIda()">Actualizar Datos Ida</button>
-  </div>
-
-  <button onclick="toggleGlobal()">Mostrar/Ocultar Global</button>
   <br>
-
-
-  <div>
-    <button onclick="sumar(1)">+1 EQ1</button>
-    <button onclick="restar(1)">-1 EQ1</button>
-    <button onclick="sumar(2)">+1 EQ2</button>
-    <button onclick="restar(2)">-1 EQ2</button>
-    <br>
-    <button onclick="iniciar()">Iniciar</button>
-    <button onclick="detener()">Detener</button>
-    <button onclick="reiniciar()">Reiniciar</button>
-    <br>
-    <h3>Tiempo añadido</h3>
-    <button onclick="anadirTiempo(1)">+1</button>
-    <button onclick="anadirTiempo(2)">+2</button>
-    <button onclick="anadirTiempo(3)">+3</button>
-    <button onclick="anadirTiempo(4)">+4</button>
-    <button onclick="anadirTiempo(5)">+5</button>
-    <br>
-    <a href="../marcadores.html">
-      <button>Volver</button>
-    </a>
-  </div>
+  <button onclick="sumar(1)">+1 EQ1</button>
+  <button onclick="restar(1)">-1 EQ1</button>
+  <button onclick="sumar(2)">+1 EQ2</button>
+  <button onclick="restar(2)">-1 EQ2</button>
+  <br>
+  <button onclick="iniciar()">Iniciar</button>
+  <button onclick="detener()">Detener</button>
+  <button onclick="reiniciar()">Reiniciar</button>
+  <br>
+  <h2>Tiempo añadido</h2>
+  <button onclick="anadirTiempo(1)">+1</button>
+  <button onclick="anadirTiempo(2)">+2</button>
+  <button onclick="anadirTiempo(3)">+3</button>
+  <button onclick="anadirTiempo(4)">+4</button>
+  <button onclick="anadirTiempo(5)">+5</button>
+  <br>
+  <a href="../marcadores.html">
+    <button>Volver</button>
+  </a>
 
   <audio id="reproductorGol" src=""></audio>
 
   <script>
+    const equipos = [
+      { abv: "ATM", colores: ["#e01f1a", "#ffffff"], escudo: "../imgs/escudos/atlmadrid.png", himno: "../audios/atleti.mp3" },
+      { abv: "MCF", colores: ["#3498db","#ffffff"], escudo: "../imgs/escudos/malaga.png", himno: "../audios/general.mp3" },
+      { abv: "BET", colores: ["#03da18","#ffffff"], escudo: "../imgs/escudos/betis.png", himno: "../audios/betis.mp3" },
+      { abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villarreal.png", himno: "../audios/villarreal.mp3" },
+      { abv: "ATH", colores: ["#ff4040","#ffffff"], escudo: "../imgs/escudos/athletic.png", himno: "../audios/athletic.mp3" },
+      { abv: "RSO", colores: ["#005ab9","#ffffff"], escudo: "../imgs/escudos/realsociedad.png", himno: "../audios/real.mp3" },
+      { abv: "FCB", colores: ["#8f1515","#1c1f54"], escudo: "../imgs/escudos/barcelona.png", himno: "../audios/barça.mp3" },
+      { abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/madrid.png", himno: "../audios/madrid.mp3" },
+    ];
+
     let marcador1 = 0, marcador2 = 0;
     let ida1 = 0, ida2 = 0;
     let tiempo = 0, intervalo;
@@ -85,42 +80,29 @@
     const extraDiv = document.getElementById("temporizador-extra"); // Referencia nueva
     const globalDiv = document.getElementById("resultado-global");
 
-    const equipos = {
-      "ATM": { nombre: "Atleti", abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atlmadrid.png", himno: "../audios/atleti.mp3" },
-      "MCF": { nombre: "Málaga", abv: "MCF", color: "#3498db", escudo: "../imgs/escudos/malaga.png", himno: "../audios/general.mp3" },
-      "BET": { nombre: "Betis", abv: "BET", color: "#03da18", escudo: "../imgs/escudos/betis.png", himno: "../audios/betis.mp3" },
-      "VIL": { nombre: "Villarreal", abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villarreal.png", himno: "../audios/villarreal.mp3" },
-      "ATH": { nombre: "Athletic", abv: "ATH", color: "#ff4040", escudo: "../imgs/escudos/athletic.png", himno: "../audios/athletic.mp3" },
-      "RSO": { nombre: "R. Sociedad", abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/realsociedad.png", himno: "../audios/real.mp3" },
-      "FCB": { nombre: "Barça", abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barcelona.png", himno: "../audios/barça.mp3" },
-      "RMA": { nombre: "R. Madrid", abv: "RMA", color: "#ffffff", escudo: "../imgs/escudos/madrid.png", himno: "../audios/madrid.mp3" }
-    };
-
     function actualizarMarcador() {
       res.textContent = `${marcador1} ‎ ‎ ‎ ‎ ‎ ‎ ${marcador2}`;
-      actualizarGlobal();
     }
 
     const reproductor = document.getElementById("reproductorGol");
 
     function sumar(equipoNum) {
-      // Obtenemos la abreviatura (ej: "ATM")
+      // 1. Obtener la abreviatura que está escrita actualmente en el marcador
       let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
 
-      // CORRECCIÓN: Acceso directo al objeto equipos usando la clave
-      let datosEquipo = equipos[abvEquipo];
+      // 2. Buscar los datos de ese equipo en nuestro array
+      let datosEquipo = equipos.find(e => e.abv === abvEquipo);
 
+      // 3. Sumar el gol
       if (equipoNum === 1) marcador1++;
       else marcador2++;
 
       actualizarMarcador();
 
+      // 4. Lanzar animación y sonido si el equipo existe
       if (datosEquipo) {
         lanzarAnimacionGol(datosEquipo.escudo);
-        // Solo suena si hemos definido el himno
-        if (datosEquipo.himno) {
-            reproducirHimno(datosEquipo.himno);
-        }
+        reproducirHimno(datosEquipo.himno);
       }
     }
 
@@ -183,34 +165,6 @@
       // Solo mostramos el cuadro azul (display block) no movemos nada mas
       extraDiv.style.display = "block";
     }
-
-    // --- LÓGICA DE GLOBAL (AGGREGATE) NUEVA ---
-
-    function fijarIda() {
-      ida1 = parseInt(document.getElementById("inputIda1").value) || 0;
-      ida2 = parseInt(document.getElementById("inputIda2").value) || 0;
-      actualizarGlobal(); // Refresca el texto inmediatamente
-    }
-
-    // Esta función hace la matemática y actualiza el texto en pantalla
-    function actualizarGlobal() {
-      const total1 = ida1 + marcador1;
-      const total2 = ida2 + marcador2;
-
-      // Muestra "Global: X-Y" (o "Agg:" para estilo Champions inglés)
-      globalDiv.textContent = `(${total1}-${total2})`;
-    }
-
-    function toggleGlobal() {
-      // Usamos 'flex' para mantener el centrado del texto definido en el CSS anterior
-      if (globalDiv.style.display === "flex") {
-        globalDiv.style.display = "none";
-      } else {
-        globalDiv.style.display = "flex";
-        actualizarGlobal(); // Aseguramos que al mostrarlo esté actualizado
-      }
-    }
-
     // --- CONTROL DEL TIEMPO ---
 
     function iniciar() {
@@ -235,31 +189,36 @@
       extraDiv.style.display = "none";
     }
 
-    // Generar botones de escudos
-    const fila1 = document.getElementById("fila1");
-    const fila2 = document.getElementById("fila2");
+    // ... (Tu función crearBotonesEquipos sigue igual) ...
+    function crearBotonesEquipos(containerId, equipoNum) {
+      const cont = document.getElementById(containerId);
+      equipos.forEach(eq => {
+        const btn = document.createElement("button");
+        btn.className = "boton-escudo";
+        btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="40px">`;
 
-    Object.keys(equipos).forEach(clave => {
-      const eq = equipos[clave];
+        btn.onclick = () => {
+          document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
 
-      const btn1 = document.createElement("div");
-      btn1.classList.add("escudo-btn");
-      btn1.style.backgroundImage = `url('${eq.escudo}')`;
-      btn1.onclick = () => seleccionarEquipo(1, clave);
-      fila1.appendChild(btn1);
+          const barra = document.getElementById(`barra${equipoNum}`);
 
-      const btn2 = document.createElement("div");
-      btn2.classList.add("escudo-btn");
-      btn2.style.backgroundImage = `url('${eq.escudo}')`;
-      btn2.onclick = () => seleccionarEquipo(2, clave);
-      fila2.appendChild(btn2);
-    });
-
-    function seleccionarEquipo(num, clave) {
-      const eq = equipos[clave];
-      document.getElementById(`equipo${num}-abv`).textContent = eq.abv;
-      document.getElementById(`barra${num}`).style.backgroundColor = eq.color;
+          // Si el equipo tiene 2 colores definidos
+          if (eq.colores && eq.colores.length === 2) {
+            // Creamos un degradado lineal de arriba a abajo (to bottom) 
+            // con un corte seco al 50%
+            barra.style.background = `linear-gradient(to bottom, ${eq.colores[0]} 50%, ${eq.colores[1]} 50%)`;
+          } else {
+            // Si solo hay un color (por si acaso no actualizas todos)
+            barra.style.backgroundColor = eq.color;
+            barra.style.background = eq.color;
+          }
+        };
+        cont.appendChild(btn);
+      });
     }
+
+    crearBotonesEquipos("botonesEq1", 1);
+    crearBotonesEquipos("botonesEq2", 2);
 
     actualizarMarcador();
     actualizarTiempo();

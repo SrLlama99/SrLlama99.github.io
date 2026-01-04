@@ -63,10 +63,10 @@ body {
 /* Rectángulos blancos finos */
 .barra-equipo {
     position: absolute;
-    top: 140px;
+    top: 138px;
     /* Ajuste la posición vertical para que se vea mejor */
     width: 21px;
-    height: 69px;
+    height: 72px;
     background-color: red;
 }
 

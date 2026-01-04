@@ -62,14 +62,14 @@
 
     <script>
         const equipos = [
-            { abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atleti.png", himno: "../audios/atleti.mp3" },
+            { abv: "ATM", colores: ["#e01f1a", "#ffffff"], escudo: "../imgs/escudos/atleti.png", himno: "../audios/atleti.mp3" },
             { abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villa.png", himno: "../audios/villarreal.mp3" },
             { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png", himno: "../audios/liverpool.mp3" },
-            { abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/rso.png", himno: "../audios/real.mp3" },
-            { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
+            { abv: "RSO", colores: ["#005ab9","#ffffff"], escudo: "../imgs/escudos/rso.png", himno: "../audios/real.mp3" },
+            { abv: "ACM", colores: ["#710b06","#000000"], escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
             { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png", himno: "../audios/general.mp3" },
-            { abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barca.png", himno: "../audios/barça.mp3" },
-            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
+            { abv: "FCB", colores: ["#8f1515","#1c1f54"], escudo: "../imgs/escudos/barca.png", himno: "../audios/barça.mp3" },
+            { abv: "AST", colores: ["#ad1457","#8186e6"], escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
         ];
 
         let marcador1 = 0, marcador2 = 0;
@@ -197,11 +197,23 @@
             equipos.forEach(eq => {
                 const btn = document.createElement("button");
                 btn.className = "boton-escudo";
-                // Nota: He quitado la imagen para el ejemplo si no carga, pero dejalo como lo tenias
                 btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="40px">`;
+
                 btn.onclick = () => {
                     document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
-                    document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
+
+                    const barra = document.getElementById(`barra${equipoNum}`);
+
+                    // Si el equipo tiene 2 colores definidos
+                    if (eq.colores && eq.colores.length === 2) {
+                        // Creamos un degradado lineal de arriba a abajo (to bottom) 
+                        // con un corte seco al 50%
+                        barra.style.background = `linear-gradient(to bottom, ${eq.colores[0]} 50%, ${eq.colores[1]} 50%)`;
+                    } else {
+                        // Si solo hay un color (por si acaso no actualizas todos)
+                        barra.style.backgroundColor = eq.color;
+                        barra.style.background = eq.color;
+                    }
                 };
                 cont.appendChild(btn);
             });

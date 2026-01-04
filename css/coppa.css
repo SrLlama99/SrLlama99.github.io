@@ -64,10 +64,10 @@ body {
 /* Rectángulos blancos finos */
 .barra-equipo {
     position: absolute;
-    top: 165px;
+    top: 166px;
     /* Ajuste la posición vertical para que se vea mejor */
-    width: 15px;
-    height: 44px;
+    width: 14px;
+    height: 43px;
     background-color: white;
 }
 
@@ -80,7 +80,7 @@ body {
 #barra2 {
     /* Posiciona la barra a la derecha del bloque de tiempo */
     /* La pongo cerca de donde termina el marcador completo */
-    right: 372px;
+    right: 373px;
 }
 
 /* Cronómetro en el rectángulo blanco inferior */
