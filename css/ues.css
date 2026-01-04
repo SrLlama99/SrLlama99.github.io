@@ -1,12 +1,12 @@
 @font-face {
-    font-family: "Serie A";
-    src: url("../fonts/PowerGrotesk-Regular.ttf") format("truetype");
+    font-family: "Champions";
+    src: url("../fonts/Champions-Bold.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }
 
 body {
-    font-family: "Serie A", Arial, sans-serif;
+    font-family: "Champions", Arial, sans-serif;
     background-color: green;
     text-align: center;
 }
@@ -16,7 +16,7 @@ body {
     width: 700px;
     height: 350px;
     margin: 40px auto;
-    background-image: url("../imgs/marcadores/supercoppa.png");
+    background-image: url("../imgs/marcadores/ues.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -25,7 +25,7 @@ body {
 /* Abreviaturas */
 .equipo-abv {
     position: absolute;
-    top: 144px;
+    top: 115px;
     width: 160px;
     color: white;
     font-size: 45px;
@@ -34,20 +34,20 @@ body {
 }
 
 #equipo1-abv {
-    left: 260px;
+    left: 280px;
     text-align: center;
 }
 
 #equipo2-abv {
-    right: -14px;
+    right: 15px;
     text-align: left;
 }
 
 /* Resultado en la caja verde */
 .resultado {
     position: absolute;
-    top: 126px;
-    left: 67%;
+    top: 94px;
+    left: 65.75%;
     transform: translateX(-50%);
     width: 160px;
     height: 90px;
@@ -55,40 +55,40 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 50px;
+    font-size: 60px;
     font-weight: bold;
-    color: #2B5AFE;
+    color: #FFFFFF;
 }
 
 /* Rectángulos blancos finos */
 .barra-equipo {
     position: absolute;
-    top: 140px;
+    top: 112px;
     /* Ajuste la posición vertical para que se vea mejor */
-    width: 21px;
-    height: 69px;
+    width: 15px;
+    height: 60px;
     background-color: red;
 }
 
 #barra1 {
     /* Posiciona la barra a la izquierda del bloque EQ1 (si existiera un bloque contenedor azul) */
     /* La pongo cerca de donde comienza el marcador completo */
-    left: 395px;
+    left: 278px;
 }
 
 #barra2 {
     /* Posiciona la barra a la derecha del bloque de tiempo */
     /* La pongo cerca de donde termina el marcador completo */
-    right: 159px;
+    right: 58px;
 }
 
 /* Cronómetro en el rectángulo blanco inferior */
 .cronometro {
     position: absolute;
-    bottom: 150px;
-    left: 27%;
+    bottom: 180px;
+    left: 25%;
     transform: translateX(-50%);
-    color: #2B5AFE;
+    color: #FFFFFF;
     font-size: 50px;
     font-weight: bold;
 }
@@ -142,14 +142,14 @@ h2 {
 
 .temporizador-extra {
     position: absolute;
-    top: 61%;
+    top: 50%;
     /* Lo empuja justo debajo del marcador */
-    left: 13%;
+    left: 5.5%;
     /* AJUSTA ESTE VALOR para alinearlo con el reloj */
-    background-color: #2B5AFE;
+    background: linear-gradient(90deg, #06AFEF 0%, #035B7E 50%, #00131A 100%);
     /* Azul igual que el banner */
     color: #FFFFFF;
-    padding: 0px 68px;
+    padding: 0px 88px;
     font-weight: bold;
     font-size: 50px;
     z-index: 10;
@@ -159,11 +159,11 @@ h2 {
 
 .overlay-gol {
     position: absolute;
-    top: 38%;
+    top: 32%;
     left: -160%; /* Empieza fuera de la pantalla a la izquierda */
     width: 105%;
     height: 90px;
-    background: linear-gradient(90deg, #2B5AFE 0%, #FFFFFF 20%, #FFFFFF 80%, #2B5AFE 100%);
+    background: linear-gradient(90deg, #06AFEF 0%, #035B7E 20%, #05315C 80%, #00131A 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,8 +183,8 @@ h2 {
 }
 
 .texto-gol {
-    color: #2B5AFE;
-    font-size: 38px;
+    color: #FFFFFF;
+    font-size: 50px;
     font-weight: 900;
     text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
     z-index: 2;

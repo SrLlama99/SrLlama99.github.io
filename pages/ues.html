@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marcador LLF</title>
+    <link rel="stylesheet" href="../css/ues.css">
+</head>
+
+<body>
+
+    <div class="marcador">
+        <div id="barra1" class="barra-equipo"></div>
+        <div id="barra2" class="barra-equipo"></div>
+
+        <div id="equipo1-abv" class="equipo-abv">EQ1</div>
+        <div id="equipo2-abv" class="equipo-abv">EQ2</div>
+
+        <div class="resultado" id="resultado">0 - 0</div>
+
+        <div class="cronometro" id="cronometro">15:00</div>
+        <div class="temporizador-extra" id="temporizador-extra">+0</div>
+        <div id="animacion-gol" class="overlay-gol">
+            <div class="contenido-gol">
+                <span class="texto-gol">GOOOOOOOL</span>
+                <img id="escudo-gol" src="" alt="escudo" class="escudo-fondo">
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2>Equipo 1</h2>
+        <div class="equipos" id="botonesEq1"></div>
+
+        <h2>Equipo 2</h2>
+        <div class="equipos" id="botonesEq2"></div>
+        <br>
+
+        <button onclick="sumar(1)">+1 EQ1</button>
+        <button onclick="restar(1)">-1 EQ1</button>
+        <button onclick="sumar(2)">+1 EQ2</button>
+        <button onclick="restar(2)">-1 EQ2</button>
+        <br>
+        <button onclick="iniciar()">Iniciar</button>
+        <button onclick="detener()">Detener</button>
+        <button onclick="reiniciar()">Reiniciar</button>
+        <br>
+        <h2>Tiempo añadido</h2>
+        <button onclick="anadirTiempo(1)">+1</button>
+        <button onclick="anadirTiempo(2)">+2</button>
+        <button onclick="anadirTiempo(3)">+3</button>
+        <button onclick="anadirTiempo(4)">+4</button>
+        <button onclick="anadirTiempo(5)">+5</button>
+        <br>
+        <a href="../marcadores.html">
+            <button>Volver</button>
+        </a>
+    </div>
+
+    <audio id="reproductorGol" src=""></audio>
+
+    <script>
+        const equipos = [
+            { abv: "ATM", color: "#e01f1a", escudo: "../imgs/escudos/atleti.png", himno: "../audios/atleti.mp3" },
+            { abv: "VIL", color: "#f1c40f", escudo: "../imgs/escudos/villa.png", himno: "../audios/villarreal.mp3" },
+            { abv: "LIV", color: "#831f18", escudo: "../imgs/escudos/liverpool.png", himno: "../audios/liverpool.mp3" },
+            { abv: "RSO", color: "#005ab9", escudo: "../imgs/escudos/rso.png", himno: "../audios/real.mp3" },
+            { abv: "ACM", color: "#710b06", escudo: "../imgs/escudos/milan.png", himno: "../audios/milan.mp3" },
+            { abv: "TOR", color: "#881f19", escudo: "../imgs/escudos/torino.png", himno: "../audios/general.mp3" },
+            { abv: "FCB", color: "#8f1515", escudo: "../imgs/escudos/barca.png", himno: "../audios/barça.mp3" },
+            { abv: "AST", color: "#ad1457", escudo: "../imgs/escudos/astonvilla.png", himno: "../audios/general.mp3" },
+        ];
+
+        let marcador1 = 0, marcador2 = 0;
+        let ida1 = 0, ida2 = 0;
+        let tiempo = 0, intervalo;
+        let tiempoExtra = 0;
+
+        const res = document.getElementById("resultado");
+        const cron = document.getElementById("cronometro");
+        const extraDiv = document.getElementById("temporizador-extra"); // Referencia nueva
+        const globalDiv = document.getElementById("resultado-global");
+
+        function actualizarMarcador() {
+            res.textContent = `${marcador1} ‎ ${marcador2}`;
+        }
+
+        const reproductor = document.getElementById("reproductorGol");
+
+        function sumar(equipoNum) {
+            // 1. Obtener la abreviatura que está escrita actualmente en el marcador
+            let abvEquipo = document.getElementById(`equipo${equipoNum}-abv`).textContent;
+
+            // 2. Buscar los datos de ese equipo en nuestro array
+            let datosEquipo = equipos.find(e => e.abv === abvEquipo);
+
+            // 3. Sumar el gol
+            if (equipoNum === 1) marcador1++;
+            else marcador2++;
+
+            actualizarMarcador();
+
+            // 4. Lanzar animación y sonido si el equipo existe
+            if (datosEquipo) {
+                lanzarAnimacionGol(datosEquipo.escudo);
+                reproducirHimno(datosEquipo.himno);
+            }
+        }
+
+        function reproducirHimno(rutaAudio) {
+            if (rutaAudio) {
+                reproductor.src = rutaAudio; // Cambiamos la canción a la del equipo que marcó
+                reproductor.volume = 0.7;    // Ajusta el volumen a tu gusto (0.0 a 1.0)
+                reproductor.play();          // ¡Suena el gol!
+            }
+        }
+
+        // Modificamos también la animación para que cuando se limpie, el audio se detenga o baje
+        function lanzarAnimacionGol(urlEscudo) {
+            const overlay = document.getElementById("animacion-gol");
+            const imgEscudo = document.getElementById("escudo-gol");
+
+            imgEscudo.src = urlEscudo;
+
+            overlay.classList.remove("animar-gol");
+            void overlay.offsetWidth;
+            overlay.classList.add("animar-gol");
+
+            setTimeout(() => {
+                overlay.classList.remove("animar-gol");
+                // Opcional: Desvanecer el audio gradualmente al terminar la animación
+                let fadeOut = setInterval(() => {
+                    if (reproductor.volume > 0.1) {
+                        reproductor.volume -= 0.1;
+                    } else {
+                        reproductor.pause();
+                        clearInterval(fadeOut);
+                    }
+                }, 200);
+            }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
+        }
+
+        function restar(equipo) {
+            if (equipo === 1 && marcador1 > 0) marcador1--;
+            else if (equipo === 2 && marcador2 > 0) marcador2--;
+            actualizarMarcador();
+        }
+
+        function actualizarTiempo() {
+            let min = Math.floor(tiempo / 60);
+            let seg = tiempo % 60;
+            if (seg < 10) seg = "0" + seg;
+            if (min < 10) min = "0" + min;
+            cron.textContent = `${min}:${seg}`;
+        }
+
+        // --- LÓGICA DE TIEMPO EXTRA MODIFICADA ---
+
+        function actualizarTemporizadorExtra() {
+            extraDiv.textContent = "+" + tiempoExtra;
+        }
+
+        function anadirTiempo(min) {
+            tiempoExtra += min;
+            actualizarTemporizadorExtra();
+            // Solo mostramos el cuadro azul (display block) no movemos nada mas
+            extraDiv.style.display = "block";
+        }
+        // --- CONTROL DEL TIEMPO ---
+
+        function iniciar() {
+            if (intervalo) clearInterval(intervalo);
+            intervalo = setInterval(() => {
+                tiempo++;
+                actualizarTiempo();
+            }, 1000);
+        }
+
+        function detener() {
+            clearInterval(intervalo);
+        }
+
+        function reiniciar() {
+            clearInterval(intervalo);
+            tiempo = 0;
+            tiempoExtra = 0;
+            actualizarTiempo();
+
+            // Ocultar el extra al reiniciar
+            extraDiv.style.display = "none";
+        }
+
+        // ... (Tu función crearBotonesEquipos sigue igual) ...
+        function crearBotonesEquipos(containerId, equipoNum) {
+            const cont = document.getElementById(containerId);
+            equipos.forEach(eq => {
+                const btn = document.createElement("button");
+                btn.className = "boton-escudo";
+                // Nota: He quitado la imagen para el ejemplo si no carga, pero dejalo como lo tenias
+                btn.innerHTML = `<img src="${eq.escudo}" alt="${eq.abv}" width="40px">`;
+                btn.onclick = () => {
+                    document.getElementById(`equipo${equipoNum}-abv`).textContent = eq.abv;
+                    document.getElementById(`barra${equipoNum}`).style.backgroundColor = eq.color;
+                };
+                cont.appendChild(btn);
+            });
+        }
+
+        crearBotonesEquipos("botonesEq1", 1);
+        crearBotonesEquipos("botonesEq2", 2);
+
+        actualizarMarcador();
+        actualizarTiempo();
+    </script>
+</body>
+
+</html>
