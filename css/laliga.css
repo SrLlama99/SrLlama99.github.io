@@ -214,27 +214,22 @@ button:hover {
 
 /* Clase que dispara la animación */
 .animar-gol {
+    left: 55%;
+    transform: translateX(-50%); /* Lo centra horizontalmente */
     animation: barridoGol 3s ease-in-out forwards;
 }
 
 @keyframes barridoGol {
     0% {
-        left: -100%;
+        top: 100%;
     }
-
     20% {
-        left: 30%;
+        top: 25%; /* Ajustado para que se vea en el centro */
     }
-
-    /* Llega al centro rápidamente */
     80% {
-        left: 30%;
+        top: 25%; /* Se mantiene quieto */
     }
-
-    /* Se queda quieto un momento */
     100% {
-        left: 100%;
+        top: -100%; /* Sale por arriba */
     }
-
-    /* Desaparece por la derecha */
 }
