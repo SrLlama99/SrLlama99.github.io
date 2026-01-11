@@ -1,0 +1,408 @@
+@font-face {
+    font-family: "Chulapa";
+    src: url("../fonts/Chulapa-Light.otf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: "Chulapa", Arial, sans-serif;
+    background-color: green;
+    text-align: center;
+}
+
+.marcador {
+    position: relative;
+    z-index: 10;
+    width: 1920px;
+    height: 1080px;
+    margin: 40px auto;
+    background-image: url("../imgs/marcadores/mundial.gif");
+    background-size: auto;
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-position-x: 0px;
+    background-position-y: 0px;
+}
+
+/* Abreviaturas */
+.equipo-abv {
+    position: absolute;
+    top: 128px;
+    width: 160px;
+    color: #FCDD58;
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#equipo1-abv {
+    left: 70px;
+    text-align: center;
+}
+
+#equipo2-abv {
+    left: 370px;
+    text-align: center;
+}
+
+/* Resultado en la caja verde */
+.bloque-goles {
+    position: absolute;
+    width: 54%;
+    /* Ancho del cuadro blanco de goles */
+    height: 50%;
+    display: flex;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+}
+
+.goles-pos-1 {
+    top: 12%;
+    left: -445px;
+}
+
+.goles-pos-2 {
+    top: 12%;
+    left: 7px;
+}
+
+/* Cronómetro en el rectángulo blanco inferior */
+.cronometro {
+    position: absolute;
+    top: 132px;
+    left: 15.6%;
+    transform: translateX(-50%);
+    color: #951C1B;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.equipos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+}
+
+.boton-escudo {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.boton-escudo:hover {
+    transform: scale(1.15);
+}
+
+.boton-escudo img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: white;
+    padding: 5px;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #222;
+}
+
+h2 {
+    margin-top: 20px;
+    color: white;
+}
+
+.temporizador-extra {
+    position: absolute;
+    top: 16.5%;
+    /* Lo empuja justo debajo del marcador */
+    left: 252px;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #951C1B;
+    /* Azul igual que el banner */
+    color: #FCDD58;
+    padding: 0px 38px;
+    font-weight: bold;
+    font-size: 22px;
+    z-index: -1;
+    border-radius: 10px / 12px;
+    /* Estado inicial: invisible y "subido" hacia arriba */
+    opacity: 0;
+    transform: translateX(-100%);
+    /* La transición define la velocidad y suavidad */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    /* El cubic-bezier le da un pequeño efecto de rebote al final, muy "TV" */
+}
+
+/* Esta es la clase que pondremos con JS para mostrarlo */
+.temporizador-extra.activo {
+    opacity: 1;
+    transform: translateX(0);
+    /* Vuelve a su sitio original bajando */
+    /* Oculto por defecto */
+}
+
+/* Contenedor principal de la animación (oculto) */
+.overlay-gol {
+    position: absolute;
+    top: 36%;
+    left: -160%;
+    /* Empieza fuera de la pantalla a la izquierda */
+    width: 120%;
+    height: 70px;
+    background: linear-gradient(90deg, rgb(0, 0, 0) 0%, rgba(254, 116, 31, 1) 50%, rgb(0, 0, 0) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+    transition: none;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+/* El contenido interno */
+.contenido-gol {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto-gol {
+    color: white;
+    font-size: 38px;
+    font-weight: 900;
+    text-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+/* El escudo semitransparente a la derecha */
+.escudo-fondo {
+    position: absolute;
+    right: 30%;
+    height: 100px;
+    /* Más grande que la barra para que sobresalga */
+    opacity: 0.3;
+    filter: grayscale(20%) brightness(1.2);
+    z-index: 1;
+}
+
+/* Clase que dispara la animación */
+.animar-gol {
+    animation: barridoGol 3s ease-in-out forwards;
+}
+
+@keyframes barridoGol {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 0;
+    }
+
+    /* Llega al centro rápidamente */
+    80% {
+        left: 0;
+    }
+
+    /* Se queda quieto un momento */
+    100% {
+        left: 100%;
+    }
+
+    /* Desaparece por la derecha */
+}
+
+.escudo1 {
+    position: absolute;
+    right: 87.2%;
+    top: 11.5%;
+    width: 50px;
+    height: 50px;
+    border: #FCDD58 solid 1px;
+    border-radius: 50%;
+    align-items: center;
+}
+
+.escudo2 {
+    position: absolute;
+    right: 78.8%;
+    top: 11.5%;
+    width: 50px;
+    height: 50px;
+    border: #FCDD58 solid 1px;
+    border-radius: 50%;
+    align-items: center;
+}
+
+.marcador2 {
+    position: relative;
+    z-index: 10;
+    width: 1920px;
+    height: 1080px;
+    margin: 40px auto;
+    background-image: url("../imgs/marcadores/mundial2.gif");
+    background-size: 50%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-position-x: center;
+    background-position-y: 600px;
+}
+
+/* Abreviaturas */
+.equipo-abv1 {
+    position: absolute;
+    top: 815px;
+    width: 300px;
+    color: #FCDD58;
+    font-size: 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#equipo1-name {
+    left: 580px;
+    text-align: left;
+}
+
+#equipo2-name {
+    left: 1040px;
+    text-align: right;
+}
+
+/* Resultado en la caja verde */
+.bloque-goles1 {
+    position: absolute;
+    width: 20%;
+    /* Ancho del cuadro blanco de goles */
+    height: 20%;
+    display: flex;
+    justify-content: center;
+    font-size: 50px;
+    font-weight: bold;
+    color: white;
+}
+
+.goles-pos-3 {
+    top: 75%;
+    right: 62.6%;
+}
+
+.goles-pos-4 {
+    top: 75%;
+    left: 62.6%;
+}
+
+/* Cronómetro en el rectángulo blanco inferior */
+.cronometro1 {
+    position: absolute;
+    top: 75.2%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #951C1B;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.escudo1-max {
+    position: absolute;
+    right: 54.6%;
+    top: 74%;
+    width: 85px;
+    height: 85px;
+    border: #FCDD58 solid 1px;
+    border-radius: 50%;
+    align-items: center;
+}
+
+.escudo2-max {
+    position: absolute;
+    left: 54.6%;
+    top: 74%;
+    width: 85px;
+    height: 85px;
+    border: #FCDD58 solid 1px;
+    border-radius: 50%;
+    align-items: center;
+}
+
+.temporizador-extra1 {
+    position: absolute;
+    top: 69.6%;
+    /* Lo empuja justo debajo del marcador */
+    left: 46.8%;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #951C1B;
+    /* Azul igual que el banner */
+    color: #FCDD58;
+    padding: 0px 46px;
+    font-weight: bold;
+    font-size: 40px;
+    z-index: -1;
+    border-radius: 12px / 20px;
+    /* Estado inicial: invisible y "subido" hacia arriba */
+    opacity: 0;
+    transform: translateX(-100%);
+    /* La transición define la velocidad y suavidad */
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+    /* El cubic-bezier le da un pequeño efecto de rebote al final, muy "TV" */
+}
+
+/* Esta es la clase que pondremos con JS para mostrarlo */
+.temporizador-extra1.activo {
+    opacity: 1;
+    transform: translateX(0);
+    /* Vuelve a su sitio original bajando */
+    /* Oculto por defecto */
+}
+
+/* Modifica estas partes en tu bloque de CSS */
+
+/* Estilos comunes para ambos overlays de croma */
+.overlay-marcador-bajo,
+.overlay-marcador-alto {
+    position: absolute;
+    background: blue;
+    /* Color para croma */
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    pointer-events: none;
+}
+
+/* Ajuste específico para el marcador superior (pequeño) */
+.overlay-marcador-alto {
+    top: 5%;
+    left: 0%;
+    width: 30%;
+    height: 150px;
+}
+
+/* Ajuste específico para el marcador inferior (grande) */
+.overlay-marcador-bajo {
+    top: 74%;
+    left: 20%;
+    width: 60%;
+    height: 200px;
+}
+
+.tapado {
+    opacity: 1 !important;
+}
