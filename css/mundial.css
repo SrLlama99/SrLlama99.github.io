@@ -379,7 +379,7 @@ h2 {
 .overlay-marcador-bajo,
 .overlay-marcador-alto {
     position: absolute;
-    background: blue;
+    background: green;
     /* Color para croma */
     z-index: 1000;
     opacity: 0;
