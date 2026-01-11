@@ -380,11 +380,10 @@ h2 {
 .overlay-marcador-alto {
     position: absolute;
     background: green;
-    /* Color para croma */
     z-index: 1000;
-    opacity: 0;
-    transition: opacity 1s ease-in-out;
     pointer-events: none;
+    transition: opacity 0.8s ease-in-out; 
+    opacity: 0;
 }
 
 /* Ajuste específico para el marcador superior (pequeño) */

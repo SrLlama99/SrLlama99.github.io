@@ -170,37 +170,36 @@
             }, 4000); // He subido a 4 segundos para que dé tiempo a escuchar el audio
         }
 
-        let estadoMarcador = 1; // 0: Tapa Alto, 1: Tapa Bajo
-
-        function alternarMarcadores() {
+        function cicloMarcadores() {
             const tapaAlto = document.getElementById("animacion-marcador-alto");
             const tapaBajo = document.getElementById("animacion-marcador-bajo");
 
-            if (estadoMarcador === 0) {
-                // TAPAR ALTO - MOSTRAR BAJO
+            // --- PASO 1: MODO NORMAL (Vemos el de Arriba) ---
+            // Tapamos el de abajo y mostramos el de arriba
+            tapaBajo.classList.add("tapado");
+            tapaAlto.classList.remove("tapado");
+            console.log("Ciclo: Viendo marcador SUPERIOR (4 min)");
+
+            // Esperamos 4 minutos (240.000 ms) para cambiar
+            setTimeout(() => {
+
+                // --- PASO 2: MODO INSERTO (Vemos el de Abajo) ---
+                // Tapamos el de arriba y mostramos el de abajo
                 tapaAlto.classList.add("tapado");
                 tapaBajo.classList.remove("tapado");
-                console.log("Modo: Viendo marcador BAJO (grande)");
-                estadoMarcador = 1;
-            } else {
-                // TAPAR BAJO - MOSTRAR ALTO
-                tapaBajo.classList.add("tapado");
-                tapaAlto.classList.remove("tapado");
-                console.log("Modo: Viendo marcador ALTO (pequeño)");
-                estadoMarcador = 0;
-            }
+                console.log("Ciclo: Viendo marcador INFERIOR (15 seg)");
+
+                // Esperamos solo 15 segundos (15.000 ms)
+                setTimeout(() => {
+                    // --- PASO 3: REINICIAR EL CICLO ---
+                    cicloMarcadores();
+                }, 15000);
+
+            }, 240000);
         }
 
-        // Iniciar el ciclo
-        function iniciarCicloSeguro() {
-            // Ejecución inicial
-            alternarMarcadores();
-
-            // Cambiar cada 4 minutos (240.000 ms)
-            setInterval(alternarMarcadores, 240000);
-        }
-
-        iniciarCicloSeguro();
+        // Arrancar el ciclo por primera vez
+        cicloMarcadores();
 
         function restar(equipo) {
             if (equipo === 1 && marcador1 > 0) marcador1--;
