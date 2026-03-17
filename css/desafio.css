@@ -1,0 +1,222 @@
+@font-face {
+    font-family: "Serie A";
+    src: url("../fonts/PowerGrotesk-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: "Serie A", Arial, sans-serif;
+    background-color: green;
+    text-align: center;
+    color: white;
+}
+
+.marcador {
+    position: relative;
+    width: 700px;
+    height: 350px;
+    margin: 40px auto;
+    background-image: url("../imgs/marcadores/desafio.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.equipo-abv {
+    position: absolute;
+    top: 150px;
+    width: 160px;
+    color: white;
+    font-size: 38px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+#equipo1-abv {
+    left: 95px;
+    text-align: right;
+}
+
+#equipo2-abv {
+    right: 90px;
+    text-align: left;
+}
+
+.resultado {
+    position: absolute;
+    top: 127px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 90px;
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    font-weight: bold;
+    color: #A300FA;
+}
+
+.barra-equipo {
+    position: absolute;
+    top: 152px;
+    width: 17px;
+    height: 48.35px;
+    background-color: white;
+}
+
+#barra1 {
+    left: 197px;
+}
+
+#barra2 {
+    right: 370px;
+}
+
+.cronometro {
+    position: absolute;
+    bottom: 110px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.escudo {
+    position: absolute;
+    width: 70px; /* Tamaño del escudo */
+    bottom: 45%;
+}
+
+#escudo1{
+    left: 90px;
+}
+
+#escudo2{
+    right: 90px;
+}
+
+.equipos {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.boton-escudo {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.boton-escudo:hover {
+    transform: scale(1.15);
+}
+
+.boton-escudo img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: white;
+    padding: 5px;
+}
+
+button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #222;
+}
+
+h2 {
+    margin-top: 20px;
+    color: white;
+}
+
+.temporizador-extra {
+    position: absolute;
+    top: 70%;
+    /* Lo empuja justo debajo del marcador */
+    left: 37%;
+    /* AJUSTA ESTE VALOR para alinearlo con el reloj */
+    background-color: #A300FA;
+    /* Azul igual que el banner */
+    color: #FFFFFF;
+    padding: 3px 8px;
+    font-weight: bold;
+    font-size: 30px;
+    z-index: 10;
+    display: none;
+    width: 166px;
+    height: 30px;
+    clip-path: polygon(0% 0%, 100% 0%, 80% 100%, 20% 100%);
+    /* Oculto por defecto */
+}
+
+.overlay-gol {
+    position: absolute;
+    top: 40%;
+    left: -160%; /* Empieza fuera de la pantalla a la izquierda */
+    width: 105%;
+    height: 70px;
+    background: linear-gradient(90deg, #570583 0%, #A300FA 50%, #570583 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    overflow: hidden;
+    transition: none;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+
+/* El contenido interno */
+.contenido-gol {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.texto-gol {
+    color: white;
+    font-size: 38px;
+    font-weight: 900;
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    z-index: 2;
+}
+
+/* El escudo semitransparente a la derecha */
+.escudo-fondo {
+    position: absolute;
+    right: 30%;
+    height: 100px; /* Más grande que la barra para que sobresalga */
+    opacity: 0.3;
+    filter: grayscale(20%) brightness(1.2);
+    z-index: 1;
+}
+
+/* Clase que dispara la animación */
+.animar-gol {
+    animation: barridoGol 3s ease-in-out forwards;
+}
+
+@keyframes barridoGol {
+    0% { left: -100%; }
+    20% { left: 0; }  /* Llega al centro rápidamente */
+    80% { left: 0; }  /* Se queda quieto un momento */
+    100% { left: 100%; } /* Desaparece por la derecha */
+}
